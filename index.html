@@ -172,28 +172,7 @@
         <h2 class="h2">Sık sorulan sorular</h2>
       </div>
     </div>
-    <div class="accordion">
-      <div class="acc-item">
-        <button class="acc-head" aria-expanded="false">VIP satın aldıktan sonra ne zaman aktif olur? <span class="plus">+</span></button>
-        <div class="acc-body"><div class="acc-body-inner">Satın alma formunda girdiğin oyun içi kimlik (nick + şifre) ile ödemenin eşleştiği anda VIP otomatik tanımlanır — genelde birkaç dakika sürer. Otomatik eşleşmeyen siparişler ekibimiz tarafından elle onaylanır.</div></div>
-      </div>
-      <div class="acc-item">
-        <button class="acc-head" aria-expanded="false">VIP'yi isim + şifre ile alabilir miyim? <span class="plus">+</span></button>
-        <div class="acc-body"><div class="acc-body-inner">Evet — SteamID paylaşmak istemiyorsanız oyun içi isim ve belirlediğiniz bir şifre ile de VIP tanımlanabilir.</div></div>
-      </div>
-      <div class="acc-item">
-        <button class="acc-head" aria-expanded="false">Ödeme yaptım ama VIP hâlâ tanımlanmadı, ne yapmalıyım? <span class="plus">+</span></button>
-        <div class="acc-body"><div class="acc-body-inner">Sipariş numaranla birlikte TS3 üzerinden (Advanced) yönetim ekibine ulaş; sipariş kontrol edilip elle tanımlansın.</div></div>
-      </div>
-      <div class="acc-item">
-        <button class="acc-head" aria-expanded="false">Sunucuya nasıl bağlanırım? <span class="plus">+</span></button>
-        <div class="acc-body"><div class="acc-body-inner">CS 1.6'da konsolu açıp <span class="mono">connect 95.173.173.124:27015</span> yazman yeterli. Sitedeki "Sunucuya Bağlan" butonu da oyunu otomatik açar.</div></div>
-      </div>
-      <div class="acc-item">
-        <button class="acc-head" aria-expanded="false">İade politikası nedir? <span class="plus">+</span></button>
-        <div class="acc-body"><div class="acc-body-inner">Satın alınan ürünler dijital ve anında teslim edilen hizmetler olduğundan cayma/iade hakkı bulunmuyor. Hatalı işlem kaynaklı durumlar için iletişim bölümünden yönetime ulaşabilirsin.</div></div>
-      </div>
-    </div>
+    <div class="accordion" id="home-sss"></div>
   </div>
 </section>
 
@@ -276,6 +255,26 @@
 <script>
 (function () {
   const A = window.ADV;
+  /* ---- yönetici panelindeki S.S.S. verisini ziyaretçiye yansıt ---- */
+  function paintHomeSss() {
+    const el = document.getElementById("home-sss");
+    if (!el || !A.sss) return;
+    const list = A.sss.published();
+    el.innerHTML = list.length ? list.map((x) => `
+      <div class="acc-item">
+        <button class="acc-head" aria-expanded="false">${A.esc(x.q || "") } <span class="plus">+</span></button>
+        <div class="acc-body"><div class="acc-body-inner">${A.esc(x.a || "")}</div></div>
+      </div>`).join("") : '<p class="muted">Henüz yayınlanmış soru bulunmuyor.</p>';
+    el.querySelectorAll(".acc-head").forEach((button) => button.addEventListener("click", () => {
+      const item = button.closest(".acc-item");
+      const body = item.querySelector(".acc-body");
+      const open = item.classList.toggle("open");
+      button.setAttribute("aria-expanded", open ? "true" : "false");
+      if (body) body.style.maxHeight = open ? body.scrollHeight + 40 + "px" : "0px";
+    }));
+  }
+  paintHomeSss();
+  document.addEventListener("adv:remote-update", paintHomeSss);
   /* ---- sunucu istatistikleri ----
      Şimdilik 0 gösterilir. API kurulduğunda sadece bu blok değişecek:
      A.serverStats.get() gerçek veriyi döndürdüğünde ekrandaki sayılar güncellenir. */
