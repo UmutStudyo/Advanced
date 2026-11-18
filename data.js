@@ -33,7 +33,7 @@ window.ADV = (function () {
     email: "admin@gmail.com",
     serverIp: "95.173.173.124:27015",
     ts3: "Advanced",
-    logo: "assets/logo.png",
+    logo: "logo.png",
     instagram: "https://instagram.com/advclan",
     youtube: "https://youtube.com/@rweqewnickz",
     maintenance: false,

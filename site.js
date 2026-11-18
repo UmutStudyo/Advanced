@@ -227,7 +227,7 @@
     if (old) old.remove();
     document.body.classList.remove("maintenance-mode");
     if (!st.maintenance || isAdmin()) return;
-    const logo = st.logo || "assets/logo.png";
+    const logo = st.logo || "logo.png";
     const title = st.maintenanceTitle || "Bakımdayız";
     const text = st.maintenanceText || "Site şu anda bakımda. Kısa süre içinde yeniden yayında olacağız.";
     const until = fmtUntil(st.maintenanceUntil);
@@ -322,7 +322,7 @@
     el.innerHTML =
       '<div class="gate-card">' +
       '<div class="gate-head">' +
-      '<img class="gate-logo" src="' + A.esc(st.logo || "assets/logo.png") + '" alt="' + A.esc(st.siteName || "Advanced") + '" />' +
+      '<img class="gate-logo" src="' + A.esc(st.logo || "logo.png") + '" alt="' + A.esc(st.siteName || "Advanced") + '" />' +
       '<span class="gate-site">' + A.esc(st.siteName || "Advanced") + "</span>" +
       "</div>" +
       '<div class="gate-body">' +
