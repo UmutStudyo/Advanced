@@ -1,0 +1,2974 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Developer Settings — Advanced</title>
+<meta name="robots" content="noindex, nofollow" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css" />
+<script>
+/* panel teması: varsayılan karanlık, siteyle aynı anahtarı kullanır */
+(function () {
+  var t = "dark";
+  try { t = localStorage.getItem("adv_theme") || "dark"; } catch (e) {}
+  document.documentElement.setAttribute("data-theme", t);
+})();
+</script>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23e0ab3a'/%3E%3Ctext x='32' y='44' font-family='monospace' font-size='34' font-weight='bold' text-anchor='middle' fill='%2314110a'%3EA%3C/text%3E%3C/svg%3E" />
+</head>
+<body>
+
+<!-- ============ GİRİŞ EKRANI ============ -->
+<div class="adm" id="login-screen">
+  <div class="adm-login">
+    <form class="adm-login-card" id="login-form">
+      <div class="adm-login-logo">
+        <img src="assets/logo.png" alt="Advanced Gaming" />
+        <span class="dev-settings-label">Developer Settings</span>
+      </div>
+      <h1>Giriş yap</h1>
+      <p>Devam etmek için yönetici hesabınla giriş yap.</p>
+      <div class="adm-alert" id="login-error" style="display:none">E-posta veya şifre hatalı.</div>
+      <div class="field">
+        <label for="l-email">E-posta</label>
+        <input class="input" id="l-email" type="email" autocomplete="username" placeholder="admin@gmail.com" required />
+      </div>
+      <div class="field">
+        <label for="l-pass">Şifre</label>
+        <input class="input" id="l-pass" type="password" autocomplete="current-password" placeholder="••••••••" required />
+      </div>
+      <button class="adm-btn primary" style="width:100%;margin-top:6px" type="submit">Giriş Yap</button>
+      <a href="index.html" style="display:inline-block;margin-top:14px;font-size:.8125rem;color:var(--muted)"><svg class="ic" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 18l-6-6 6-6"/></svg> Siteye dön</a>
+    </form>
+  </div>
+</div>
+
+<!-- ============ PANEL ============ -->
+<div class="adm" id="panel" style="display:none">
+  <aside class="adm-side">
+    <div class="adm-logo">
+      <img src="assets/logo.png" alt="Advanced Gaming" class="adm-logo-img" width="26" height="26" />
+      <div><strong>ADVANCED</strong><span>Developer Settings</span></div>
+    </div>
+    <nav class="adm-nav" id="adm-nav">
+      <a href="#dashboard" data-tab="dashboard" data-need="dashboard" class="active"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg> Panel</a>
+      <a href="#duyurular" data-tab="duyurular" data-need="notices.view"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11v2a1 1 0 0 0 1 1h2l4 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M16 8a5 5 0 0 1 0 8"/><path d="M19 5a9 9 0 0 1 0 14"/></svg> Duyurular</a>
+      <a href="#galeri" data-tab="galeri" data-need="gallery.view"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="m21 16-5-5L5 20"/></svg> Galeri</a>
+      <a href="#urunler" data-tab="urunler" data-need="products.view"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4 12 22l-9-9V4h9l8.6 8.6a1.4 1.4 0 0 1 0 2z"/><circle cx="7.5" cy="7.5" r="1.2"/></svg> Fiyatlandırma</a>
+      <a href="#mesajlar" data-tab="mesajlar" data-need="messages.view"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg> Mesajlar</a>
+      <a href="#kadro" data-tab="kadro" data-need="team.view"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9.5" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13A4 4 0 0 1 16 11"/></svg> Kadro</a>
+      <a href="#yoneticiler" data-tab="yoneticiler" data-need="accounts.view"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></svg> Yöneticiler</a>
+      <a href="#ayarlar" data-tab="ayarlar" data-need="settings.view"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg> Ayarlar</a>
+      <a href="#modul" data-tab="modul" data-need="module.view"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 3 7.5v9L12 21l9-4.5v-9L12 3z"/><path d="M3 7.5 12 12l9-4.5"/><path d="M12 12v9"/></svg> Modül</a>
+      <a href="#redul" data-tab="redul" data-need="redul.view"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18"/><path d="M12 3v18" stroke-opacity=".45"/><circle cx="12" cy="12" r="3.2"/></svg> Redül</a>
+      <a href="#metul" data-tab="metul" data-need="metul.view"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V5h16v2"/><path d="M12 5v14"/><path d="M9 19h6"/><path d="M17 12h4"/></svg> Metül</a>
+      <a href="#banip" data-tab="banip" data-need="banip.view"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M5.6 5.6 18.4 18.4"/></svg> BanIP</a>
+      <a href="#kayitlar" data-tab="kayitlar" data-need="kayitlar.view"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Kayıtlar</a>
+      <a href="#sss" data-tab="sss" data-need="sss.view"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.2 9.3a2.9 2.9 0 0 1 5.6 1c0 1.9-2.8 2.2-2.8 4"/><path d="M12 17.6v.01"/></svg> S.S.S</a>
+    </nav>
+    <div class="spacer"></div>
+    <button class="theme-switch" id="adm-theme" type="button" role="switch" aria-checked="false" aria-label="Aydınlık mod" title="Aydınlık moda geç">
+      <span class="theme-switch-track">
+        <span class="theme-switch-knob">
+          <svg class="ts-moon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg>
+          <svg class="ts-sun" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.8v2M12 19.2v2M2.8 12h2M19.2 12h2M5.4 5.4l1.4 1.4M17.2 17.2l1.4 1.4M18.6 5.4l-1.4 1.4M6.8 17.2l-1.4 1.4"/></svg>
+        </span>
+      </span>
+      <span class="theme-switch-label">Aydınlık mod</span>
+    </button>
+    <a class="adm-site-link" href="index.html" id="view-site"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14 21 3"/></svg> Siteyi görüntüle</a>
+    <button class="adm-btn danger" id="logout" style="margin-top:8px">Çıkış yap</button>
+  </aside>
+
+  <main class="adm-main">
+
+    <!-- ================= DASHBOARD ================= -->
+    <section data-panel="dashboard" data-need="dashboard">
+      <div class="adm-top">
+        <div><h1>Dashboard</h1><p>Site, içerik ve moderasyon özeti</p></div>
+        <div class="dash-top-right">
+          <span class="pill pill-live"><span class="dot-live"></span>Canlı</span>
+          <span class="pill" id="dash-who">—</span>
+        </div>
+      </div>
+
+      <!-- karşılama şeridi -->
+      <div class="dash-hero">
+        <div class="dash-hero-left">
+          <div class="dash-hero-kicker">Hoş geldin</div>
+          <div class="dash-hero-name" id="dash-hello">—</div>
+          <div class="dash-hero-sub" id="dash-hero-sub">Panel özeti hazırlanıyor</div>
+        </div>
+        <div class="dash-hero-right">
+          <div class="dash-hero-item">
+            <div class="dash-hero-label">Sunucu</div>
+            <div class="dash-hero-value mono" id="dash-server-ip">—</div>
+          </div>
+          <div class="dash-hero-item">
+            <div class="dash-hero-label">Durum</div>
+            <div class="dash-hero-value" id="dash-site-status">—</div>
+          </div>
+          <div class="dash-hero-item">
+            <div class="dash-hero-label">Son giriş</div>
+            <div class="dash-hero-value" id="dash-last-login">—</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- okunmamış / dikkat gerektirenler -->
+      <div class="dash-alerts" id="dash-alerts"></div>
+
+      <h2 class="adm-h2">Öne çıkanlar</h2>
+      <div class="dash-kpis">
+        <div class="dash-kpi" data-goto="duyurular">
+          <div class="dash-kpi-top">
+            <span class="dash-kpi-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H8l-4 4z"/><path d="M8 9h8M8 12.5h5"/></svg></span>
+            <span class="dash-kpi-trend" id="kpi-notices-trend">—</span>
+          </div>
+          <div class="dash-kpi-value" id="kpi-notices">0</div>
+          <div class="dash-kpi-label">Yayındaki duyuru</div>
+          <div class="dash-kpi-foot" id="kpi-notices-foot">—</div>
+        </div>
+        <div class="dash-kpi" data-goto="galeri">
+          <div class="dash-kpi-top">
+            <span class="dash-kpi-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.6"/><path d="m4 17 5-5 4 4 3-3 4 4"/></svg></span>
+            <span class="dash-kpi-trend" id="kpi-gallery-trend">—</span>
+          </div>
+          <div class="dash-kpi-value" id="kpi-gallery">0</div>
+          <div class="dash-kpi-label">Galeri fotoğrafı</div>
+          <div class="dash-kpi-foot" id="kpi-gallery-foot">—</div>
+        </div>
+        <div class="dash-kpi" data-goto="fiyatlandirma">
+          <div class="dash-kpi-top">
+            <span class="dash-kpi-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12v7a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-7"/><path d="M2 7h20v5H2z"/><path d="M12 7v13"/><path d="M12 7S9.5 3 7.5 3 5 5.2 6.2 6.4 12 7 12 7zM12 7s2.5-4 4.5-4S19 5.2 17.8 6.4 12 7 12 7z"/></svg></span>
+            <span class="dash-kpi-trend" id="kpi-products-trend">—</span>
+          </div>
+          <div class="dash-kpi-value" id="kpi-products">0</div>
+          <div class="dash-kpi-label">Aktif ürün</div>
+          <div class="dash-kpi-foot" id="kpi-products-foot">—</div>
+        </div>
+        <div class="dash-kpi" data-goto="mesajlar">
+          <div class="dash-kpi-top">
+            <span class="dash-kpi-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 0 1-12.4 7.6L3 21l1.9-5.6A8.5 8.5 0 1 1 21 11.5z"/></svg></span>
+            <span class="dash-kpi-trend" id="kpi-messages-trend">—</span>
+          </div>
+          <div class="dash-kpi-value" id="kpi-messages">0</div>
+          <div class="dash-kpi-label">Okunmamış mesaj</div>
+          <div class="dash-kpi-foot" id="kpi-messages-foot">—</div>
+        </div>
+      </div>
+
+      <!-- grafik + ziyaretçi -->
+      <div class="dash-row dash-row--2">
+        <div class="adm-card">
+          <div class="adm-card-head">
+            <h3 class="adm-card-title">Son 14 gün · Ziyaretçi</h3>
+            <span class="pill" id="chart-total">0</span>
+          </div>
+          <div class="dash-chart" id="dash-chart"></div>
+          <div class="dash-chart-axis" id="dash-chart-axis"></div>
+        </div>
+        <div class="adm-card">
+          <div class="adm-card-head"><h3 class="adm-card-title">Ziyaretçi</h3></div>
+          <div class="dash-rows">
+            <div class="dash-rowline"><span>Bugün</span><b id="st-visits-day">0</b></div>
+            <div class="dash-rowline"><span>Bu hafta</span><b id="st-visits-week">0</b></div>
+            <div class="dash-rowline"><span>Bu ay</span><b id="st-visits-month">0</b></div>
+            <div class="dash-rowline"><span>Toplam</span><b id="st-visits-total">0</b></div>
+          </div>
+          <div class="dash-sep"></div>
+          <div class="adm-card-head"><h3 class="adm-card-title">Ortalama gezinme</h3><span class="pill" id="st-avg-badge">—</span></div>
+          <div class="adm-big" id="st-avg-time">0 dk</div>
+          <p class="adm-hint">Ziyaretçi oturum sürelerinin ortalaması.</p>
+        </div>
+      </div>
+
+      <!-- moderasyon -->
+      <h2 class="adm-h2">Moderasyon</h2>
+      <div class="dash-kpis dash-kpis--3">
+        <div class="dash-kpi" data-goto="kadro">
+          <div class="dash-kpi-value" id="st-team">0</div>
+          <div class="dash-kpi-label">Kadro üyesi</div>
+          <div class="dash-kpi-foot" id="kpi-team-foot">—</div>
+        </div>
+        <div class="dash-kpi" data-goto="yoneticiler">
+          <div class="dash-kpi-value" id="st-accounts">0</div>
+          <div class="dash-kpi-label">Yönetici hesabı</div>
+          <div class="dash-kpi-foot" id="kpi-accounts-foot">—</div>
+        </div>
+        <div class="dash-kpi" data-goto="banip">
+          <div class="dash-kpi-value" id="st-bans">0</div>
+          <div class="dash-kpi-label">Banlı IP</div>
+          <div class="dash-kpi-foot" id="kpi-bans-foot">—</div>
+        </div>
+      </div>
+
+      <!-- son hareket + hızlı işlem -->
+      <div class="dash-row dash-row--2">
+        <div class="adm-card">
+          <div class="adm-card-head">
+            <h3 class="adm-card-title">Son hareketler</h3>
+            <span class="pill" id="dash-activity-count">0</span>
+          </div>
+          <div class="dash-feed" id="dash-feed"></div>
+        </div>
+        <div class="adm-card">
+          <div class="adm-card-head"><h3 class="adm-card-title">Bu ay · Admin girişi</h3></div>
+          <div class="dash-rows">
+            <div class="dash-rowline"><span>Bugün</span><b id="st-logins-day">0</b></div>
+            <div class="dash-rowline"><span>Bu hafta</span><b id="st-logins-week">0</b></div>
+            <div class="dash-rowline"><span>Bu ay</span><b id="st-logins-month">0</b></div>
+            <div class="dash-rowline"><span>Toplam</span><b id="st-logins-total">0</b></div>
+          </div>
+          <div class="dash-sep"></div>
+          <div class="adm-h2" style="margin-top:0">Hızlı işlem</div>
+          <div class="dash-quick">
+            <button class="adm-btn sm" data-quick="duyurular">Yeni duyuru</button>
+            <button class="adm-btn sm" data-quick="galeri">Fotoğraf ekle</button>
+            <button class="adm-btn sm" data-quick="mesajlar">Mesajlara bak</button>
+            <button class="adm-btn sm" data-quick="modul">Bakım modu</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= DUYURULAR ================= -->
+    <section data-panel="duyurular" data-need="notices.view" style="display:none">
+      <div class="adm-top">
+        <div><h1>Duyurular</h1><p>Aktif duyurular, oluşturma ve geçmiş (ilk 250)</p></div>
+        <button class="adm-btn primary" id="new-notice">Yeni duyuru</button>
+      </div>
+      <div class="adm-toolbar">
+        <div class="adm-tabs" id="notice-tabs">
+          <button class="adm-tab active" data-view="active">Aktif</button>
+          <button class="adm-tab" data-view="history">Geçmiş</button>
+        </div>
+        <input class="input" id="notice-search" placeholder="Duyuru ara..." style="max-width:260px" />
+      </div>
+
+      <div class="adm-card" id="notice-editor" style="display:none;margin-bottom:18px">
+        <h3 class="adm-card-title" id="notice-editor-title">Yeni duyuru</h3>
+        <input type="hidden" id="n-id" />
+        <div class="adm-grid-2">
+          <div class="field"><label for="n-title">Başlık</label><input class="input" id="n-title" placeholder="Duyuru başlığı" /></div>
+          <div class="field"><label for="n-date">Tarih</label><input class="input" id="n-date" type="date" /></div>
+        </div>
+        <div class="field"><label for="n-summary">Özet (kartta görünür)</label><textarea class="textarea" id="n-summary" style="min-height:80px" placeholder="Kısa özet"></textarea></div>
+        <div class="field"><label for="n-body">İçerik</label><textarea class="textarea" id="n-body" placeholder="Duyurunun tam metni"></textarea></div>
+        <label class="adm-check"><input type="checkbox" id="n-pinned" /> Site üstünde sabitle</label>
+        <div class="adm-toolbar" style="margin:0">
+          <button class="adm-btn primary" id="save-notice">Kaydet</button>
+          <button class="adm-btn" id="cancel-notice">Vazgeç</button>
+        </div>
+      </div>
+
+      <div class="adm-card">
+        <table class="adm-table"><thead><tr><th style="width:38px"></th><th>Tarih</th><th>Başlık</th><th>Durum</th><th style="width:220px">İşlem</th></tr></thead>
+        <tbody id="notices-table"></tbody></table>
+      </div>
+    </section>
+
+    <!-- ================= GALERİ ================= -->
+    <section data-panel="galeri" data-need="gallery.view" style="display:none">
+      <div class="adm-top">
+        <div><h1>Galeri</h1><p>Aktif görseller, oluşturma ve geçmiş (ilk 250)</p></div>
+        <button class="adm-btn primary" id="new-photo">Yeni fotoğraf</button>
+      </div>
+      <div class="adm-toolbar">
+        <div class="adm-tabs" id="gallery-tabs">
+          <button class="adm-tab active" data-view="active">Aktif</button>
+          <button class="adm-tab" data-view="history">Geçmiş</button>
+        </div>
+      </div>
+
+      <div class="adm-card" id="photo-editor" style="display:none;margin-bottom:18px">
+        <input type="hidden" id="g-id" />
+        <div class="adm-grid-2">
+          <div class="field"><label for="g-title">Başlık</label><input class="input" id="g-title" placeholder="Görsel başlığı" /></div>
+          <div class="field"><label for="g-tag">Etiket</label><input class="input" id="g-tag" placeholder="etkinlik, map adı..." /></div>
+        </div>
+        <div class="field"><label for="g-file">Dosyadan yükle</label><input class="input" id="g-file" type="file" accept="image/*" /></div>
+        <div class="field"><label for="g-src">veya görsel adresi (URL / dosya yolu)</label><input class="input" id="g-src" placeholder="assets/g1.jpg veya https://..." /></div>
+        <label class="adm-check"><input type="checkbox" id="g-pinned" /> Galeride sabitle</label>
+        <div class="adm-toolbar" style="margin:0">
+          <button class="adm-btn primary" id="save-photo">Kaydet</button>
+          <button class="adm-btn" id="cancel-photo">Vazgeç</button>
+        </div>
+      </div>
+
+      <div class="adm-card">
+        <table class="adm-table"><thead><tr><th style="width:38px"></th><th style="width:90px">Görsel</th><th>Başlık</th><th>Etiket</th><th>Durum</th><th style="width:220px">İşlem</th></tr></thead>
+        <tbody id="gallery-table"></tbody></table>
+      </div>
+    </section>
+
+    <!-- ================= FİYATLANDIRMA ================= -->
+    <section data-panel="urunler" data-need="products.view" style="display:none">
+      <div class="adm-top">
+        <div><h1>Fiyatlandırma</h1><p>Aktif ürünler, oluşturma ve ürün geçmişi (ilk 250)</p></div>
+        <button class="adm-btn primary" id="new-product">Yeni ürün</button>
+      </div>
+      <div class="adm-toolbar">
+        <div class="adm-tabs" id="product-tabs">
+          <button class="adm-tab active" data-view="active">Aktif</button>
+          <button class="adm-tab" data-view="history">Geçmiş</button>
+        </div>
+      </div>
+
+      <div class="adm-card" id="product-editor" style="display:none;margin-bottom:18px">
+        <input type="hidden" id="p-id" />
+        <div class="adm-grid-2">
+          <div class="field"><label for="p-name">Ürün adı</label><input class="input" id="p-name" /></div>
+          <div class="field"><label for="p-tag">Etiket</label><input class="input" id="p-tag" placeholder="VIP, ÖNERİLEN..." /></div>
+          <div class="field"><label for="p-price">Fiyat (TL)</label><input class="input" id="p-price" inputmode="numeric" /></div>
+          <div class="field"><label for="p-period">Süre metni</label><input class="input" id="p-period" placeholder="/ 1 ay" /></div>
+        </div>
+        <div class="field"><label for="p-desc">Açıklama</label><textarea class="textarea" id="p-desc" style="min-height:70px"></textarea></div>
+        <div class="field"><label for="p-features">Özellikler (her satır bir madde)</label><textarea class="textarea" id="p-features" style="min-height:90px"></textarea></div>
+        <label class="adm-check"><input type="checkbox" id="p-featured" /> Öne çıkan ürün</label>
+        <label class="adm-check"><input type="checkbox" id="p-pinned" /> Fiyatlandırmada sabitle</label>
+        <div class="adm-toolbar" style="margin:0">
+          <button class="adm-btn primary" id="save-product">Kaydet</button>
+          <button class="adm-btn" id="cancel-product">Vazgeç</button>
+        </div>
+      </div>
+
+      <div class="adm-card" id="product-active-wrap">
+        <table class="adm-table"><thead><tr><th style="width:38px"></th><th>Ürün</th><th>Fiyat</th><th>Süre</th><th>Durum</th><th style="width:220px">İşlem</th></tr></thead>
+        <tbody id="products-table"></tbody></table>
+      </div>
+      <div class="adm-card" id="product-history-wrap" style="display:none">
+        <table class="adm-table"><thead><tr><th>Tarih</th><th>Ürün</th><th>Fiyat</th><th>İşlem</th></tr></thead>
+        <tbody id="product-history-table"></tbody></table>
+      </div>
+    </section>
+
+    <!-- ================= MESAJLAR ================= -->
+    <section data-panel="mesajlar" data-need="messages.view" style="display:none">
+      <div class="adm-top"><div><h1>Mesajlar</h1><p>Gelen mesajlar ve gönderen detayları</p></div></div>
+      <div class="adm-card">
+        <table class="adm-table"><thead><tr><th>Tarih</th><th>Nick</th><th>İletişim</th><th>Mesaj</th><th>IP</th><th style="width:210px">İşlem</th></tr></thead>
+        <tbody id="messages-table"></tbody></table>
+      </div>
+    </section>
+
+
+
+    <!-- ================= KADRO (site Yönetim sayfası) ================= -->
+    <section data-panel="kadro" data-need="team.view" style="display:none">
+      <div class="adm-top">
+        <div><h1>Kadro</h1><p>Yönetim sayfasındaki ekip üyelerini ekle, düzenle, sil</p></div>
+        <button class="adm-btn primary" id="new-member">Yeni üye</button>
+      </div>
+
+      <div class="adm-card" id="member-editor" style="display:none;margin-bottom:18px">
+        <input type="hidden" id="m-id" />
+        <div class="adm-grid-2">
+          <div class="field"><label for="m-name">İsim / Nick</label><input class="input" id="m-name" placeholder="xPantik" /></div>
+          <div class="field"><label for="m-role">Görev</label><input class="input" id="m-role" placeholder="Kurucu / Developer" /></div>
+          <div class="field"><label for="m-rank">Kademe</label>
+            <select class="select" id="m-rank">
+              <option value="OWNER">OWNER</option>
+              <option value="SUPER">SUPER</option>
+              <option value="ADMIN">ADMIN</option>
+              <option value="MOD">MOD</option>
+            </select>
+          </div>
+          <div class="field"><label for="m-note">Açıklama</label><input class="input" id="m-note" placeholder="Kısa açıklama" /></div>
+        </div>
+        <label class="adm-check"><input type="checkbox" id="m-pinned" /> En başta göster</label>
+        <div class="adm-toolbar" style="margin:0">
+          <button class="adm-btn primary" id="save-member">Kaydet</button>
+          <button class="adm-btn" id="cancel-member">Vazgeç</button>
+        </div>
+      </div>
+
+      <div class="adm-card">
+        <table class="adm-table"><thead><tr><th style="width:38px"></th><th>İsim</th><th>Görev</th><th>Kademe</th><th>Açıklama</th><th style="width:200px">İşlem</th></tr></thead>
+        <tbody id="team-table"></tbody></table>
+      </div>
+    </section>
+
+    <!-- ================= YÖNETİCİLER ================= -->
+    <section data-panel="yoneticiler" data-need="accounts.view" style="display:none">
+      <div class="adm-top">
+        <div><h1>Yöneticiler</h1><p>Admin hesabı ekle, rol ver, sil</p></div>
+        <button class="adm-btn primary" id="new-account">Yeni hesap</button>
+      </div>
+
+      <div class="adm-card" id="account-editor" style="display:none;margin-bottom:18px">
+        <input type="hidden" id="a-id" />
+        <div class="adm-grid-2">
+          <div class="field"><label for="a-name">Ad</label><input class="input" id="a-name" placeholder="Umut" /></div>
+          <div class="field"><label for="a-email">E-posta</label><input class="input" id="a-email" type="email" placeholder="ornek@advclan.com" /></div>
+          <div class="field"><label for="a-pass">Şifre</label><input class="input" id="a-pass" type="text" placeholder="en az 6 karakter" /></div>
+          <div class="field"><label for="a-role">Rol</label>
+            <input class="input" id="a-role" list="role-suggestions" placeholder="Admin, Moderatör, Kurucu..." />
+            <datalist id="role-suggestions">
+              <option value="OWNER">OWNER</option>
+              <option value="ADMIN">ADMIN</option>
+              <option value="MOD">MOD</option>
+            </datalist>
+          </div>
+        </div>
+        <div class="field" style="margin-bottom:8px"><label>İzinler</label></div>
+        <div id="account-perms" class="adm-perm-grid"></div>
+        <div class="adm-actions">
+          <div class="adm-actions-left">
+            <button type="button" class="adm-btn primary" id="save-account">Kaydet</button>
+            <button type="button" class="adm-btn" id="cancel-account">Vazgeç</button>
+          </div>
+          <button type="button" class="adm-btn ghost" id="account-role-defaults">Rol varsayılanı</button>
+        </div>
+      </div>
+
+      <div class="adm-card" id="perm-editor" style="display:none;margin-bottom:18px">
+        <div class="adm-card-head">
+          <h3 class="adm-card-title" id="perm-title">İzinler</h3>
+          <button class="icon-btn" data-close-perms aria-label="Kapat">×</button>
+        </div>
+        <div id="perm-list" class="adm-perm-grid"></div>
+        <div class="adm-toolbar" style="margin:0">
+          <button class="adm-btn primary" id="save-perms">İzinleri kaydet</button>
+          <button class="adm-btn" id="reset-perms">Rol varsayılanına dön</button>
+        </div>
+      </div>
+      <div class="adm-card">
+        <table class="adm-table"><thead><tr><th>Ad</th><th>E-posta</th><th>Rol</th><th>Eklenme</th><th style="width:260px">İşlem</th></tr></thead>
+        <tbody id="accounts-table"></tbody></table>
+      </div>
+    </section>
+
+    <!-- ================= AYARLAR ================= -->
+    <section data-panel="ayarlar" data-need="settings.view" style="display:none">
+      <div class="adm-top"><div><h1>Ayarlar</h1><p>Site bilgileri, iletişim kanalları ve logo</p></div></div>
+      <div class="adm-grid-2">
+        <div class="adm-card">
+          <h3 class="adm-card-title">İletişim bilgileri</h3>
+          <div class="field"><label for="s-phone">Telefon</label><input class="input" id="s-phone" /></div>
+          <div class="field"><label for="s-phone-raw">Telefon (arama linki)</label><input class="input" id="s-phone-raw" placeholder="+905352417622" /></div>
+          <div class="field"><label for="s-email">E-posta</label><input class="input" id="s-email" /></div>
+          <div class="field"><label for="s-ip">Sunucu IP</label><input class="input" id="s-ip" placeholder="95.173.173.124:27015" /></div>
+          <div class="field"><label for="s-ts3">TS3 adresi</label><input class="input" id="s-ts3" placeholder="Advanced" /></div>
+          <div class="field"><label for="s-instagram">Instagram</label><input class="input" id="s-instagram" /></div>
+          <div class="field"><label for="s-youtube">YouTube</label><input class="input" id="s-youtube" /></div>
+        </div>
+        <div>
+          <div class="adm-card" style="margin-bottom:16px">
+            <h3 class="adm-card-title">Site bilgileri</h3>
+            <div class="field"><label for="s-name">Website adı</label><input class="input" id="s-name" /></div>
+            <div class="field"><label for="s-domain">Website domain</label><input class="input" id="s-domain" /></div>
+            <div class="field"><label for="s-year">Telif yılı</label>
+              <select class="select" id="s-year"></select>
+            </div>
+          </div>
+          <div class="adm-card">
+            <h3 class="adm-card-title">Website logosu</h3>
+            <div class="adm-logo-preview"><img id="s-logo-preview" src="assets/logo.png" alt="Logo" /></div>
+            <div class="field" style="margin-top:14px"><label for="s-logo-file">Yeni logo yükle</label><input class="input" id="s-logo-file" type="file" accept="image/*" /></div>
+            <div class="field"><label for="s-logo">veya logo adresi</label><input class="input" id="s-logo" placeholder="assets/logo.png" /></div>
+          </div>
+        </div>
+      </div>
+      <div class="adm-toolbar" style="margin-top:18px">
+        <button class="adm-btn primary" id="save-settings">Ayarları kaydet</button>
+        <button class="adm-btn danger" id="reset-data">Örnek verileri sıfırla</button>
+      </div>
+      <p class="adm-hint" style="margin-top:10px">Not: Veriler bu tarayıcıda saklanır. Gerçek sunucu/veritabanı bağlandığında ayarlar oradan okunur.</p>
+    </section>
+    <section data-panel="modul" data-need="module.view" style="display:none">
+      <div class="adm-top"><div><h1>Modül</h1><p>Siteyi bakıma al veya normal yayına döndür</p></div></div>
+
+      <div class="adm-card modul-status" id="modul-status">
+        <div class="modul-status-left">
+          <span class="modul-dot" id="modul-dot"></span>
+          <div>
+            <h3 class="modul-title" id="modul-title">Durum yükleniyor…</h3>
+            <p class="modul-sub" id="modul-sub"></p>
+          </div>
+        </div>
+        <div class="modul-switch-wrap">
+          <span class="modul-switch-label" id="modul-switch-label">Kapalı</span>
+          <button type="button" class="modul-switch" id="modul-switch" role="switch" aria-checked="false" aria-label="Bakım modu">
+            <span class="modul-switch-dot"></span>
+          </button>
+        </div>
+      </div>
+
+      <div class="adm-grid-2">
+        <div class="adm-card">
+          <h3 class="adm-card-title">Bakım ekranı yazısı</h3>
+          <div class="field">
+            <label for="m-title">Başlık</label>
+            <input class="input" id="m-title" placeholder="Bakımdayız" maxlength="60" />
+          </div>
+          <div class="field">
+            <label for="m-text">Açıklama</label>
+            <textarea class="input" id="m-text" rows="4" maxlength="300" placeholder="Site şu anda bakımda. Kısa süre içinde yeniden yayında olacağız."></textarea>
+          </div>
+          <div class="field">
+            <label for="m-until">Tahmini bitiş (opsiyonel)</label>
+            <input class="input" id="m-until" type="datetime-local" />
+          </div>
+          <div class="adm-actions">
+            <div class="adm-actions-left">
+              <button type="button" class="adm-btn primary" id="save-modul">Kaydet</button>
+            </div>
+            <button type="button" class="adm-btn ghost" id="reset-modul">Varsayılan yazı</button>
+          </div>
+        </div>
+
+        <div>
+          <div class="adm-card" style="margin-bottom:16px">
+            <h3 class="adm-card-title">Önizleme</h3>
+            <div class="modul-preview">
+              <span class="modul-preview-badge">BAKIM MODU</span>
+              <h4 id="m-preview-title">Bakımdayız</h4>
+              <p id="m-preview-text">Site şu anda bakımda. Kısa süre içinde yeniden yayında olacağız.</p>
+              <span class="modul-preview-link"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg> Yönetici girişi</span>
+            </div>
+          </div>
+          <div class="adm-card">
+            <h3 class="adm-card-title">Nasıl çalışır</h3>
+            <ul class="modul-notes">
+              <li>Bakım modu açıkken ziyaretçiler site yerine bakım ekranını görür.</li>
+              <li>Yönetici hesabıyla giriş yapanlar siteyi normal şekilde gezmeye devam eder.</li>
+              <li>Bakım ekranındaki "Yönetici girişi" bağlantısı Developer Settings'e götürür.</li>
+              <li>Kapatınca site anında eski haline döner.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- ================= REDÜL (tema / renk) ================= -->
+    <section data-panel="redul" data-need="redul.view" style="display:none">
+      <div class="adm-top">
+        <div><h1>Redül</h1><p>Sitenin renk düzenini seç: varsayılan, tek renk, çift renk</p></div>
+        <span class="pill" id="redul-current">—</span>
+      </div>
+
+      <div class="adm-card">
+        <div class="adm-card-head">
+          <h3 class="adm-card-title">Renk düzeni</h3>
+          <button class="adm-btn sm" id="redul-reset">Varsayılana dön</button>
+        </div>
+        <p class="adm-hint" style="margin-bottom:16px">Seçtiğin düzen sitenin tamamına uygulanır. Hazır şablonlardan birini seç veya aşağıdan kendi rengini belirle.</p>
+
+        <div class="redul-grid" id="redul-presets">
+          <button class="redul-card is-active" data-redul-mode="single" data-brand="#8fe61a" data-accent2="">
+            <span class="redul-swatch" style="--a:#8fe61a"></span>
+            <b>Varsayılan</b>
+            <i>Tek renk · yeşil</i>
+          </button>
+          <button class="redul-card" data-redul-mode="single" data-brand="#4fa8ff" data-accent2="">
+            <span class="redul-swatch" style="--a:#4fa8ff"></span>
+            <b>Mavi</b>
+            <i>Tek renk</i>
+          </button>
+          <button class="redul-card" data-redul-mode="single" data-brand="#ff5c8a" data-accent2="">
+            <span class="redul-swatch" style="--a:#ff5c8a"></span>
+            <b>Pembe</b>
+            <i>Tek renk</i>
+          </button>
+          <button class="redul-card" data-redul-mode="single" data-brand="#a98bff" data-accent2="">
+            <span class="redul-swatch" style="--a:#a98bff"></span>
+            <b>Mor</b>
+            <i>Tek renk</i>
+          </button>
+          <button class="redul-card" data-redul-mode="single" data-brand="#ffd23f" data-accent2="">
+            <span class="redul-swatch" style="--a:#ffd23f"></span>
+            <b>Sarı</b>
+            <i>Tek renk</i>
+          </button>
+          <button class="redul-card" data-redul-mode="dual" data-brand="#8fe61a" data-accent2="#4fa8ff">
+            <span class="redul-swatch is-dual" style="--a:#8fe61a;--b:#4fa8ff"></span>
+            <b>Yeşil · Mavi</b>
+            <i>Çift renk</i>
+          </button>
+          <button class="redul-card" data-redul-mode="dual" data-brand="#8fe61a" data-accent2="#ff5c8a">
+            <span class="redul-swatch is-dual" style="--a:#8fe61a;--b:#ff5c8a"></span>
+            <b>Yeşil · Pembe</b>
+            <i>Çift renk</i>
+          </button>
+          <button class="redul-card" data-redul-mode="dual" data-brand="#ffd23f" data-accent2="#ff5c3f">
+            <span class="redul-swatch is-dual" style="--a:#ffd23f;--b:#ff5c3f"></span>
+            <b>Sarı · Turuncu</b>
+            <i>Çift renk</i>
+          </button>
+        </div>
+      </div>
+
+      <div class="adm-card" style="margin-top:16px">
+        <div class="adm-card-head">
+          <h3 class="adm-card-title">Arka plan renkleri</h3>
+          <button class="adm-btn sm" id="bg-reset">Arka planı sıfırla</button>
+        </div>
+        <p class="adm-hint" style="margin-bottom:16px">Sayfanın arka planını, kart yüzeylerini, kenarlıkları ve yazı renklerini ayrı ayrı değiştir. Boş bırakırsan temanın kendi rengi kullanılır.</p>
+        <div class="redul-grid redul-grid--bg" id="bg-fields">
+          <div class="bg-field">
+            <label>Sayfa arka planı</label>
+            <div class="redul-colorrow">
+              <input type="color" id="bg-bg" value="#151912" />
+              <input class="input mono" id="bg-bg-hex" value="#151912" maxlength="7" />
+              <button class="bg-clear" data-clear="bg" title="Temaya dön" aria-label="Temaya dön"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+            </div>
+          </div>
+          <div class="bg-field">
+            <label>Kart yüzeyi</label>
+            <div class="redul-colorrow">
+              <input type="color" id="bg-surface" value="#1d2317" />
+              <input class="input mono" id="bg-surface-hex" value="#1d2317" maxlength="7" />
+              <button class="bg-clear" data-clear="surface" title="Temaya dön" aria-label="Temaya dön"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+            </div>
+          </div>
+          <div class="bg-field">
+            <label>İkincil yüzey</label>
+            <div class="redul-colorrow">
+              <input type="color" id="bg-surface2" value="#252c1d" />
+              <input class="input mono" id="bg-surface2-hex" value="#252c1d" maxlength="7" />
+              <button class="bg-clear" data-clear="surface2" title="Temaya dön" aria-label="Temaya dön"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+            </div>
+          </div>
+          <div class="bg-field">
+            <label>Kenarlık rengi</label>
+            <div class="redul-colorrow">
+              <input type="color" id="bg-line" value="#39432c" />
+              <input class="input mono" id="bg-line-hex" value="#39432c" maxlength="7" />
+              <button class="bg-clear" data-clear="line" title="Temaya dön" aria-label="Temaya dön"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+            </div>
+          </div>
+          <div class="bg-field">
+            <label>Yazı rengi</label>
+            <div class="redul-colorrow">
+              <input type="color" id="bg-ink" value="#e9f2e6" />
+              <input class="input mono" id="bg-ink-hex" value="#e9f2e6" maxlength="7" />
+              <button class="bg-clear" data-clear="ink" title="Temaya dön" aria-label="Temaya dön"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+            </div>
+          </div>
+          <div class="bg-field">
+            <label>Soluk yazı</label>
+            <div class="redul-colorrow">
+              <input type="color" id="bg-muted" value="#8a988a" />
+              <input class="input mono" id="bg-muted-hex" value="#8a988a" maxlength="7" />
+              <button class="bg-clear" data-clear="muted" title="Temaya dön" aria-label="Temaya dön"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+            </div>
+          </div>
+        </div>
+        <div class="adm-actions">
+          <div class="adm-actions-left">
+            <button class="adm-btn primary" id="bg-save">Arka planı kaydet</button>
+            <button class="adm-btn ghost" id="bg-cancel">Vazgeç</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="adm-grid-2" style="margin-top:16px">
+        <div class="adm-card">
+          <h3 class="adm-card-title">Kendi rengin</h3>
+          <div class="redul-custom">
+            <div class="field">
+              <label for="r-brand">Ana renk</label>
+              <div class="redul-colorrow">
+                <input type="color" id="r-brand" value="#8fe61a" />
+                <input class="input mono" id="r-brand-hex" value="#8fe61a" maxlength="7" />
+              </div>
+            </div>
+            <div class="field" id="r-accent-wrap">
+              <label for="r-accent">İkinci renk (çift renk için)</label>
+              <div class="redul-colorrow">
+                <input type="color" id="r-accent" value="#4fa8ff" />
+                <input class="input mono" id="r-accent-hex" value="#4fa8ff" maxlength="7" />
+              </div>
+            </div>
+            <div class="field">
+              <label>Düzen</label>
+              <div class="redul-modes" id="redul-modes">
+                <button class="adm-tab" data-mode="single">Varsayılan</button>
+                <button class="adm-tab" data-mode="accent">Vurgu</button>
+                <button class="adm-tab" data-mode="dual">Çift renk</button>
+              </div>
+            </div>
+          </div>
+          <div class="adm-actions">
+            <div class="adm-actions-left">
+              <button class="adm-btn primary" id="redul-save">Kaydet</button>
+              <button class="adm-btn ghost" id="redul-cancel">Vazgeç</button>
+            </div>
+          </div>
+        </div>
+        <div class="adm-card">
+          <h3 class="adm-card-title">Canlı önizleme</h3>
+          <div class="redul-preview" id="redul-preview">
+            <div class="redul-preview-head">
+              <span class="redul-preview-dot"></span>
+              <b>Advanced</b>
+              <span class="redul-preview-badge">Jailbreak</span>
+            </div>
+            <div class="redul-preview-body">
+              <div class="redul-preview-h">Sunucuya katıl</div>
+              <div class="redul-preview-p">95.173.173.124:27015 · 32 kişilik</div>
+              <div class="redul-preview-btns">
+                <span class="redul-btn redul-btn--primary">Bağlan</span>
+                <span class="redul-btn redul-btn--ghost">Kurallar</span>
+              </div>
+              <div class="redul-preview-bar"><i></i></div>
+            </div>
+          </div>
+          <p class="adm-hint">Renkler önizlemede anında görünür; kaydedince siteye uygulanır.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= METÜL (yazı tipi / renk / boyut) ================= -->
+    <section data-panel="metul" data-need="metul.view" style="display:none">
+      <div class="adm-top">
+        <div><h1>Metül</h1><p>Metinlerin yazı tipini, rengini ve boyutunu ayarla</p></div>
+        <span class="pill" id="metul-current">—</span>
+      </div>
+
+      <div class="adm-card">
+        <div class="adm-card-head">
+          <h3 class="adm-card-title">Yazı tipi</h3>
+          <button class="adm-btn sm" id="metul-reset">Varsayılana dön</button>
+        </div>
+        <p class="adm-hint" style="margin-bottom:16px">Sitenin tüm metinleri seçtiğin yazı tipiyle görünür. Başlıklar ve küçük etiketler kendi karakterini korur.</p>
+        <div class="metul-fonts" id="metul-fonts">
+          <button class="metul-font is-active" data-font="varsayilan">
+            <span class="metul-font-sample" style="font-family:'Space Grotesk',system-ui,sans-serif">Aa</span>
+            <b>Varsayılan</b><i>Space Grotesk</i>
+          </button>
+          <button class="metul-font" data-font="grotesk">
+            <span class="metul-font-sample" style="font-family:'Poppins',system-ui,sans-serif">Aa</span>
+            <b>Poppins</b><i>Yuvarlak, modern</i>
+          </button>
+          <button class="metul-font" data-font="inter">
+            <span class="metul-font-sample" style="font-family:Inter,system-ui,sans-serif">Aa</span>
+            <b>Inter</b><i>Nötr, okunaklı</i>
+          </button>
+          <button class="metul-font" data-font="serif">
+            <span class="metul-font-sample" style="font-family:Georgia,'Times New Roman',serif">Aa</span>
+            <b>Serif</b><i>Klasik</i>
+          </button>
+          <button class="metul-font" data-font="mono">
+            <span class="metul-font-sample" style="font-family:ui-monospace,Consolas,monospace">Aa</span>
+            <b>Mono</b><i>Teknik</i>
+          </button>
+          <button class="metul-font" data-font="system">
+            <span class="metul-font-sample" style="font-family:system-ui,-apple-system,'Segoe UI',sans-serif">Aa</span>
+            <b>Sistem</b><i>İşletim sistemi</i>
+          </button>
+        </div>
+        <div class="field" style="margin-top:16px">
+          <label for="m-custom-font">Kendi yazı tipin (font adı veya Google Fonts bağlantısı)</label>
+          <input class="input" id="m-custom-font" placeholder="Örn: Rubik  ·  ya da  https://fonts.googleapis.com/css2?family=Rubik" />
+          <span class="metul-hint-mini">Google Fonts bağlantısı yapıştırırsan otomatik yüklenir.</span>
+        </div>
+      </div>
+
+      <div class="adm-grid-2" style="margin-top:16px">
+        <div class="adm-card">
+          <h3 class="adm-card-title">Renk ve boyut</h3>
+          <div class="field">
+            <label for="mt-ink">Metin rengi</label>
+            <div class="redul-colorrow">
+              <input type="color" id="mt-ink" value="#e9f2e6" />
+              <input class="input mono" id="mt-ink-hex" value="#e9f2e6" maxlength="7" />
+              <button class="bg-clear" data-mtclear="ink" title="Temaya dön" aria-label="Temaya dön"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+            </div>
+          </div>
+          <div class="field">
+            <label for="mt-muted">İkincil metin rengi</label>
+            <div class="redul-colorrow">
+              <input type="color" id="mt-muted" value="#8a988a" />
+              <input class="input mono" id="mt-muted-hex" value="#8a988a" maxlength="7" />
+              <button class="bg-clear" data-mtclear="muted" title="Temaya dön" aria-label="Temaya dön"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+            </div>
+          </div>
+          <div class="field">
+            <label for="mt-size">Metin boyutu <b class="metul-val" id="mt-size-val">100%</b></label>
+            <input type="range" id="mt-size" min="85" max="125" step="5" value="100" class="metul-range" />
+            <div class="metul-scale"><span>Küçük</span><span>Normal</span><span>Büyük</span></div>
+          </div>
+          <div class="field">
+            <label for="mt-weight">Yazı kalınlığı <b class="metul-val" id="mt-weight-val">400</b></label>
+            <input type="range" id="mt-weight" min="300" max="700" step="100" value="400" class="metul-range" />
+            <div class="metul-scale"><span>İnce</span><span>Normal</span><span>Kalın</span></div>
+          </div>
+          <div class="field">
+            <label for="mt-line">Satır aralığı <b class="metul-val" id="mt-line-val">1.6</b></label>
+            <input type="range" id="mt-line" min="1.3" max="2" step="0.1" value="1.6" class="metul-range" />
+            <div class="metul-scale"><span>Sıkı</span><span>Normal</span><span>Ferah</span></div>
+          </div>
+          <div class="adm-actions">
+            <div class="adm-actions-left">
+              <button class="adm-btn primary" id="metul-save">Metül'ü kaydet</button>
+              <button class="adm-btn ghost" id="metul-cancel">Vazgeç</button>
+            </div>
+          </div>
+        </div>
+        <div class="adm-card">
+          <h3 class="adm-card-title">Canlı önizleme</h3>
+          <div class="metul-preview" id="metul-preview">
+            <div class="metul-preview-kicker">Duyuru</div>
+            <div class="metul-preview-h">Yeni sezon başlıyor</div>
+            <div class="metul-preview-p">Advanced Jailbreak sunucusunda harita listesi yenilendi, VIP paketlerine yüzde 20 indirim geldi. Detaylar için duyuruları takip et.</div>
+            <div class="metul-preview-small">Son güncelleme · 17 Kasım 2026</div>
+          </div>
+          <p class="adm-hint">Değişiklikler önizlemede anında görünür; kaydedince siteye uygulanır.</p>
+        </div>
+      </div>
+    </section>
+
+    <section data-panel="banip" data-need="banip.view" style="display:none">
+      <div class="adm-top"><div><h1>BanIP</h1><p>IP adresiyle ban at, kaldır ve geçmişi gör</p></div></div>
+
+      <div class="adm-card myip-card">
+        <div class="myip-left">
+          <span class="myip-label">Bu cihazın IP'si</span>
+          <strong class="myip-value" id="my-ip">—</strong>
+        </div>
+        <div class="myip-right">
+          <input class="input" id="my-ip-input" placeholder="85.105.12.34" autocomplete="off" />
+          <button type="button" class="adm-btn" id="my-ip-save">IP'mi kaydet</button>
+          <button type="button" class="adm-btn primary" id="my-ip-ban">Bu IP'yi banla</button>
+        </div>
+      </div>
+
+      <div class="adm-card">
+        <h3 class="adm-card-title">IP ban at</h3>
+        <div class="adm-grid-2">
+          <div class="field">
+            <label for="b-ip">IP adresi</label>
+            <input class="input" id="b-ip" placeholder="85.105.12.34" autocomplete="off" />
+          </div>
+          <div class="field">
+            <label for="b-reason">Sebep</label>
+            <input class="input" id="b-reason" placeholder="Hile / küfür / reklam" maxlength="80" />
+          </div>
+        </div>
+        <div class="field">
+          <label for="b-note">Not (opsiyonel)</label>
+          <input class="input" id="b-note" placeholder="Ek bilgi" maxlength="160" />
+        </div>
+        <div class="adm-actions">
+          <div class="adm-actions-left">
+            <button type="button" class="adm-btn primary" id="ban-add">Banla</button>
+            <button type="button" class="adm-btn" id="ban-clear">Temizle</button>
+          </div>
+          <span class="ban-hint" id="ban-hint"></span>
+        </div>
+      </div>
+
+      <div class="adm-card" style="margin-top:16px">
+        <div class="adm-card-head">
+          <h3 class="adm-card-title">Banlı IP'ler <span class="ban-count" id="ban-count">0</span></h3>
+          <input class="input adm-search" id="ban-search" placeholder="IP veya sebep ara" />
+        </div>
+        <table class="adm-table">
+          <thead><tr><th>IP</th><th>Sebep</th><th>Not</th><th>Banlayan</th><th>Tarih</th><th style="width:130px">İşlem</th></tr></thead>
+          <tbody id="ban-table"></tbody>
+        </table>
+      </div>
+
+      <div class="adm-card" style="margin-top:16px">
+        <div class="adm-card-head">
+          <h3 class="adm-card-title">Ban geçmişi <span class="ban-count" id="ban-history-count">0</span></h3>
+          <span class="ban-hint">Son 250 kayıt</span>
+        </div>
+        <table class="adm-table">
+          <thead><tr><th>IP</th><th>İşlem</th><th>Sebep</th><th>Yapan</th><th>Tarih</th></tr></thead>
+          <tbody id="ban-history"></tbody>
+        </table>
+      </div>
+    </section>
+    <!-- ================= S.S.S ================= -->
+    <!-- ================= KAYITLAR (yönetici + ziyaretçi) ================= -->
+    <section data-panel="kayitlar" data-need="kayitlar.view" style="display:none">
+      <div class="adm-top">
+        <div><h1>Kayıtlar</h1><p>Yönetici girişleri ve site ziyaretleri</p></div>
+        <span class="pill" id="kayit-pill">—</span>
+      </div>
+
+      <div class="log-kpis log-kpis--6">
+        <div class="log-kpi"><span>Yönetici girişi</span><strong id="log-total">0</strong></div>
+        <div class="log-kpi"><span>Bu hafta giriş</span><strong id="log-week">0</strong></div>
+        <div class="log-kpi"><span>Son giriş</span><strong id="log-last" class="is-date">—</strong></div>
+        <div class="log-kpi"><span>Ziyaret</span><strong id="vis-total">0</strong></div>
+        <div class="log-kpi"><span>Bugün ziyaret</span><strong id="vis-day">0</strong></div>
+        <div class="log-kpi"><span>Ortalama süre</span><strong id="vis-avg" class="is-date">—</strong></div>
+      </div>
+
+      <div class="adm-card">
+        <div class="adm-card-head">
+          <h3 class="adm-card-title">Yönetici Kayıtları</h3>
+          <div class="log-head-actions">
+            <input class="input" id="log-search" placeholder="Hesap, isim veya IP ara" style="max-width:230px" />
+            <button class="adm-btn sm danger" id="log-clear">Temizle</button>
+          </div>
+        </div>
+        <div class="adm-table-wrap">
+          <table class="adm-table">
+            <thead><tr><th>Hesap</th><th>İsim</th><th>Rol</th><th>IP</th><th>Cihaz</th><th>Tarih</th></tr></thead>
+            <tbody id="log-table"></tbody>
+          </table>
+        <p class="log-limit-note" id="log-limit-note">En son 250 kayıt gösterilir.</p>
+        </div>
+      </div>
+
+      <div class="adm-card" style="margin-top:16px">
+        <div class="adm-card-head">
+          <h3 class="adm-card-title">Ziyaretçi Kayıtları</h3>
+          <div class="log-head-actions">
+            <input class="input" id="vis-search" placeholder="Sayfa, cihaz veya IP ara" style="max-width:230px" />
+            <button class="adm-btn sm danger" id="vis-clear">Temizle</button>
+          </div>
+        </div>
+        <div class="adm-table-wrap">
+          <table class="adm-table">
+            <thead><tr><th>Sayfa</th><th>Cihaz</th><th>IP</th><th>Tarih</th></tr></thead>
+            <tbody id="vis-table"></tbody>
+          </table>
+          <p class="log-limit-note" id="vis-limit-note">En son 250 kayıt gösterilir.</p>
+        </div>
+      </div>
+    </section>
+
+
+
+    <section data-panel="sss" data-need="sss.view" style="display:none">
+      <div class="adm-top">
+        <div><h1>S.S.S</h1><p>Sık sorulan sorular — site üzerinde yayınlanır</p></div>
+        <span class="pill" id="sss-count">0 soru</span>
+      </div>
+
+      <div class="adm-card">
+        <div class="adm-card-head">
+          <h3 class="adm-card-title">Soru listesi</h3>
+          <button class="adm-btn sm" id="sss-add">Soru ekle</button>
+        </div>
+        <p class="adm-hint" style="margin-bottom:14px">Soruları ve yanıtlarını buradan düzenle. Sıralamayı ok düğmeleriyle değiştir; yayında olmayanlar sitede görünmez.</p>
+        <div class="sss-list" id="sss-list"></div>
+      <div class="adm-card" id="sss-editor" style="display:none;margin-top:16px">
+        <h3 class="adm-card-title" id="sss-editor-title">Yeni soru</h3>
+        <div class="field">
+          <label for="sss-q">Soru</label>
+          <input class="input" id="sss-q" maxlength="160" placeholder="Örn: VIP nasıl satın alınır?" />
+        </div>
+        <div class="field">
+          <label for="sss-a">Yanıt</label>
+          <textarea class="input" id="sss-a" rows="5" maxlength="1200" placeholder="Sorunun yanıtını yaz..."></textarea>
+        </div>
+        <div class="sss-editor-row">
+          <label class="sss-check"><input type="checkbox" id="sss-active" checked /> <span>Yayında</span></label>
+          <label class="sss-check"><input type="checkbox" id="sss-pinned" /> <span>En üste sabitle</span></label>
+        </div>
+        <div class="adm-actions">
+          <div class="adm-actions-left">
+            <button class="adm-btn primary" id="sss-save">Kaydet</button>
+            <button class="adm-btn ghost" id="sss-cancel">Vazgeç</button>
+          </div>
+        </div>
+      </div>
+        <p class="adm-hint" id="sss-empty" style="display:none">Henüz soru yok. "Soru ekle" ile başla.</p>
+      </div>
+    </section>
+
+
+  </main>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/site.js"></script>
+<script>
+(function () {
+  const A = window.ADV;
+
+  /* ---------- panel teması (aydınlık / karanlık) ---------- */
+  (function () {
+    const btn = document.getElementById("adm-theme");
+    const root = document.documentElement;
+    const sync = () => {
+      const t = root.getAttribute("data-theme") === "light" ? "light" : "dark";
+      const light = t === "light";
+      root.setAttribute("data-theme", t);
+      if (!btn) return;
+      btn.setAttribute("aria-checked", light ? "true" : "false");
+      btn.setAttribute("title", light ? "Karanlık moda geç" : "Aydınlık moda geç");
+      btn.setAttribute("aria-label", light ? "Karanlık moda geç" : "Aydınlık moda geç");
+      const lbl = btn.querySelector(".theme-switch-label");
+      if (lbl) lbl.textContent = light ? "Aydınlık mod" : "Karanlık mod";
+    };
+    sync();
+    if (btn) btn.addEventListener("click", () => {
+      const next = root.getAttribute("data-theme") === "light" ? "dark" : "light";
+      root.setAttribute("data-theme", next);
+      try { localStorage.setItem("adv_theme", next); } catch (e) {}
+      sync();
+      try { if (window.ADVColor) window.ADVColor.apply(); } catch (e) {}
+      try { if (window.ADVText) window.ADVText.apply(); } catch (e) {}
+      A.toast(next === "light" ? "Aydınlık mod" : "Karanlık mod");
+    });
+  })();
+
+  /* ikon / bilgi kartı -> ilgili sekme (yetki varsa) */
+  const SYMBOLS = {
+    "#st-visits-day": "dashboard",
+    "#st-visits-week": "dashboard",
+    "#st-visits-month": "dashboard",
+    "#st-visits-total": "dashboard",
+    "#st-avg-time": "dashboard",
+    "#st-logins-day": "dashboard",
+    "#st-logins-week": "dashboard",
+    "#st-logins-month": "dashboard",
+    "#st-logins-total": "dashboard",
+    "#kpi-notices": "duyurular",
+    "#kpi-gallery": "galeri",
+    "#kpi-products": "fiyatlandirma",
+    "#kpi-messages": "mesajlar",
+    "#st-team": "kadro",
+    "#st-accounts": "yoneticiler",
+    "#st-bans": "banip",
+  };
+  const $ = (s) => document.querySelector(s);
+  const esc = A.esc;
+  const PIN_ICON = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6l-1 6 4 3v2H6v-2l4-3-1-6z"/><path d="M12 14v7"/></svg>';
+  const state = { noticeView: "active", galleryView: "active", productView: "active" };
+  const ROOT_EMAIL = "admin@gmail.com";
+  const isRoot = (a) => String((a && a.email) || "").toLowerCase() === ROOT_EMAIL;
+
+  /* ---------- giriş ---------- */
+  function showPanel() {
+    $("#login-screen").style.display = "none";
+    $("#panel").style.display = "block";
+    renderAll();
+    goTab(firstAllowedTab() || "dashboard");
+  }
+  /* oturum açıksa panel, script sonunda açılır */
+
+  $("#login-form").addEventListener("submit", (e) => {
+    e.preventDefault();
+    if (A.login($("#l-email").value, $("#l-pass").value)) {
+      $("#login-error").style.display = "none";
+      showPanel();
+    } else {
+      $("#login-error").style.display = "block";
+    }
+  });
+  $("#view-site").addEventListener("click", () => {
+    try {
+      sessionStorage.setItem("adv_from_maint", "1");
+    } catch (e) {}
+  });
+  /* dashboard: karta / uyarıya / hızlı işleme tıklayınca sekmeye git */
+  document.addEventListener("click", (e) => {
+    const t = e.target.closest ? e.target.closest("[data-goto],[data-quick]") : null;
+    if (!t) return;
+    const tab = t.getAttribute("data-goto") || t.getAttribute("data-quick");
+    if (!tab) return;
+    e.preventDefault();
+    goTab(tab);
+    /* hızlı işlem: ilgili ekranı aç */
+    const quick = t.getAttribute("data-quick");
+    try {
+      if (quick === "duyurular") { $("#notice-editor").style.display = "none"; ($("#new-notice") || {}).click && $("#new-notice").click(); }
+      if (quick === "galeri") { $("#photo-editor").style.display = "none"; ($("#new-photo") || {}).click && $("#new-photo").click(); }
+    } catch (err) {}
+  });
+
+  /* ikona tıklayınca ilgili sekmeye git */
+  Object.keys(SYMBOLS).forEach((sel) => {
+    const el = $(sel);
+    if (!el || !el.addEventListener) return;
+    el.style.cursor = "pointer";
+    el.title = "Sekmeye git";
+    el.addEventListener("click", () => {
+      const need = { duyurular: "notices.view", galeri: "gallery.view", fiyatlandirma: "products.view", mesajlar: "messages.view", kadro: "team.view", yoneticiler: "accounts.view", banip: "banip.view", dashboard: "dashboard" }[SYMBOLS[sel]];
+      if (need && !A.can(need)) { A.toast("Bu işlem için iznin yok"); return; }
+      goTab(SYMBOLS[sel]);
+    });
+  });
+
+  $("#logout").addEventListener("click", () => {
+    const who = A.whoami();
+    const name = (who && (who.name || who.email)) || "yönetici hesabı";
+    if (!confirm(name + " hesabından çıkmak istediğine emin misin?\n\nOturum kapanacak ve siteye dönmek için tekrar giriş yapman gerekecek.")) return;
+    A.logout();
+    location.reload();
+  });
+
+  /* ---------- sekmeler ---------- */
+
+  function goTab(tab) {
+    const link = document.querySelector('#adm-nav a[data-tab="' + tab + '"]');
+    const need = link && link.getAttribute("data-need");
+    if (need && !A.can(need)) {
+      A.toast("Bu sayfaya erişim iznin yok");
+      const fallback = firstAllowedTab();
+      if (!fallback) return;
+      tab = fallback;
+    }
+    document.querySelectorAll("[data-panel]").forEach((p) => {
+      const isThis = p.getAttribute("data-panel") === tab;
+      const need2 = p.getAttribute("data-need");
+      p.style.display = isThis && (!need2 || A.can(need2)) ? "" : "none";
+    });
+    function firstAllowedTab() {
+    const a = Array.prototype.slice
+      .call(document.querySelectorAll("#adm-nav a[data-need]"))
+      .find((x) => A.can(x.getAttribute("data-need")));
+    return a ? a.getAttribute("data-tab") : null;
+  }
+  document.querySelectorAll("#adm-nav a").forEach((a) => {
+      a.classList.toggle("active", a.getAttribute("data-tab") === tab);
+    });
+    if (location.hash !== "#" + tab) history.replaceState(null, "", "#" + tab);
+  }
+  function firstAllowedTab() {
+    const a = Array.prototype.slice
+      .call(document.querySelectorAll("#adm-nav a[data-need]"))
+      .find((x) => A.can(x.getAttribute("data-need")));
+    return a ? a.getAttribute("data-tab") : null;
+  }
+  document.querySelectorAll("#adm-nav a").forEach((a) =>
+    a.addEventListener("click", (e) => {
+      e.preventDefault();
+      goTab(a.getAttribute("data-tab"));
+    })
+  );
+  if (location.hash) goTab(location.hash.slice(1));
+
+  function bindViewTabs(sel, key, rerender) {
+    document.querySelectorAll(sel + " .adm-tab").forEach((b) =>
+      b.addEventListener("click", () => {
+        document.querySelectorAll(sel + " .adm-tab").forEach((x) => x.classList.remove("active"));
+        b.classList.add("active");
+        state[key] = b.getAttribute("data-view");
+        rerender();
+      })
+    );
+  }
+
+  /* ---------- render ---------- */
+  const R = {
+    stats: () => A.can("dashboard") && renderStats(),
+    notices: () => A.can("notices.view") && renderNotices(),
+    gallery: () => A.can("gallery.view") && renderGallery(),
+    products: () => A.can("products.view") && renderProducts(),
+    messages: () => A.can("messages.view") && renderMessages(),
+    team: () => A.can("team.view") && renderTeam(),
+    accounts: () => A.can("accounts.view") && renderAccounts(),
+    settings: () => A.can("settings.view") && fillSettings(),
+    modul: () => A.can("module.view") && fillModul(),
+    banip: () => A.can("banip.view") && renderBans(),
+    sss: () => A.can("sss.view") && renderSss(),
+    kayitlar: () => A.can("kayitlar.view") && (renderKayitKpi(), renderLogins(), renderVisits()),
+  };
+  function renderAll() {
+    Object.keys(R).forEach((k) => R[k]());
+    if (A.can("accounts.add")) paintPermChecks("#account-perms", A.ROLE_PERMS.ADMIN);
+    applyPermissions();
+  }
+
+  /* ---------- buton kilidi ---------- */
+  const LOCK_SVG = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>';
+  const NEVER_LOCK = ["data-close-perms", "data-close-msg"];
+  function lockIfDenied(el, perm) {
+    if (!el) return;
+    if (NEVER_LOCK.some((a) => el.hasAttribute(a))) return;
+    const ok = A.can(perm);
+    el.classList.toggle("locked", !ok);
+    el.setAttribute("aria-disabled", ok ? "false" : "true");
+    el.setAttribute("title", ok ? "" : "Bu işlem için iznin yok");
+    const has = el.querySelector(".btn-lock");
+    if (!ok && !has) {
+      const i = document.createElement("span");
+      i.className = "btn-lock";
+      i.innerHTML = LOCK_SVG;
+      i.setAttribute("aria-hidden", "true");
+      el.appendChild(i);
+    } else if (ok && has) {
+      has.remove();
+    }
+  }
+
+  /* kilitli butona basılırsa işlem çalışmasın (sadece o buton engellenir) */
+  document.addEventListener(
+    "click",
+    (e) => {
+      const b = e.target.closest(".locked");
+      if (!b) return;
+      e.preventDefault();
+      e.stopPropagation();
+      A.toast("Bu işlem için iznin yok");
+    },
+    true
+  );
+
+  /* ---------- işlem öncesi gerçek izin denetimi ---------- */
+  /* bir butona tıklanınca: izin yoksa hiçbir şey yapma, uyar ve dur */
+  function denied(el) {
+    const perm = permOf(el);
+    if (!perm || A.can(perm)) return false;
+    A.toast("Bu işlem için iznin yok");
+    return true;
+  }
+  /* tüm panel: tek yakalama noktası — kilitli VEYA yetkisiz işlem çalışmaz */
+  document.addEventListener(
+    "click",
+    (e) => {
+      const btn = e.target.closest("[" + ACTIONS.map((a) => a[0]).join("],[") + "], .locked");
+      if (!btn) return;
+      if (btn.classList.contains("locked") || denied(btn)) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+      }
+    },
+    true
+  );
+
+  /* ---------- izinlere göre menü ve paneller ---------- */
+  function applyPermissions() {
+    /* menü: yetkisiz sekme görünür ama kilitli */
+    document.querySelectorAll("#adm-nav a[data-need]").forEach((a) => {
+      const ok = A.can(a.getAttribute("data-need"));
+      a.classList.toggle("locked", !ok);
+      a.setAttribute("title", ok ? "" : "Bu sayfayı görmek için iznin yok");
+      let lock = a.querySelector(".nav-lock");
+      if (!ok && !lock) {
+        lock = document.createElement("span");
+        lock.className = "nav-lock";
+        lock.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>';
+        a.appendChild(lock);
+      } else if (ok && lock) {
+        lock.remove();
+      }
+    });
+    /* panel: izin yoksa sayfaya girilemez */
+    document.querySelectorAll("[data-panel][data-need]").forEach((p) => {
+      const ok = A.can(p.getAttribute("data-need"));
+      p.classList.toggle("panel-locked", !ok);
+      if (!ok) p.style.display = "none";
+    });
+    /* butonlar: izin yoksa gizlenmez, kilitlenir */
+    const map = {
+      "new-notice": "notices.add",
+      "new-photo": "gallery.add",
+      "new-product": "products.add",
+      "new-member": "team.add",
+      "new-account": "accounts.add",
+      "save-settings": "settings.edit",
+      "reset-data": "settings.edit",
+      "save-notice": "notices.add",
+      "save-photo": "gallery.add",
+      "save-product": "products.add",
+      "save-member": "team.add",
+      "save-account": "accounts.add",
+      "save-perms": "accounts.perms",
+      "account-role-defaults": "accounts.perms",
+      "reset-perms": "accounts.perms",
+      "save-modul": "module.edit",
+      "reset-modul": "module.edit",
+      "modul-switch": "module.maintenance",
+    };
+    Object.keys(map).forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) lockIfDenied(el, map[id]);
+    });
+    lockDynamicButtons();
+  }
+
+  /* satır işlem butonları: data-* -> izin eşlemesi (tek kaynak) */
+  const ACTIONS = [
+    ["data-edit-notice", "notices.edit"],
+    ["data-del-notice", "notices.delete"],
+    ["data-pin-notice", "notices.pin"],
+    ["data-edit-photo", "gallery.edit"],
+    ["data-del-photo", "gallery.delete"],
+    ["data-pin-photo", "gallery.pin"],
+    ["data-edit-product", "products.edit"],
+    ["data-del-product", "products.delete"],
+    ["data-pin-product", "products.pin"],
+    ["data-view-msg", "messages.view"],
+    ["data-del-msg", "messages.delete"],
+    ["data-edit-member", "team.edit"],
+    ["data-del-member", "team.delete"],
+    ["data-pin-member", "team.edit"],
+    ["data-perms-account", "accounts.perms"],
+    ["data-edit-account", "accounts.edit"],
+    ["data-del-account", "accounts.delete"],
+    ["data-unban", "banip.remove"],
+  ];
+  /* tablolar her yenilendiğinde çağrılır: kilit ikonu + soluk stil */
+  function lockDynamicButtons() {
+    const root = document.querySelector(".adm-main");
+    if (!root) return;
+    ACTIONS.forEach(([attr, perm]) => {
+      root.querySelectorAll("[" + attr + "]").forEach((b) => lockIfDenied(b, perm));
+    });
+  }
+  /* izin kontrolü: buton üzerinden izin anahtarını bul */
+  function permOf(el) {
+    if (!el) return null;
+    for (let i = 0; i < ACTIONS.length; i++) {
+      if (el.hasAttribute(ACTIONS[i][0])) return ACTIONS[i][1];
+    }
+    return null;
+  }
+
+
+
+
+  /* ---------- KAYITLAR: yönetici + ziyaretçi ---------- */
+  function renderKayitKpi(){
+    const ls = A.logins.stats(), vs = A.visits.stats();
+    const set = (sel, val) => { const el = $(sel); if (el) el.textContent = val; };
+    set("#log-total", String(ls.total));
+    set("#log-week", String(ls.week));
+    set("#log-last", ls.last ? A.dateTR(ls.last) : "—");
+    set("#vis-total", String(vs.total));
+    set("#vis-day", String(vs.day));
+    set("#vis-avg", vs.avgLabel || "—");
+    set("#kayit-pill", ls.total + " giriş · " + vs.total + " ziyaret");
+  }
+
+  function renderLogins(){
+    const st = A.logins.stats();
+
+    const list = A.logins.all().slice().reverse();
+    const q = ($("#log-search") ? $("#log-search").value : "").toLowerCase().trim();
+    const rows = list.filter((x) => !q || (x.user + " " + (x.name || "") + " " + (x.role || "") + " " + (x.ip || "")).toLowerCase().includes(q));
+    $("#log-table").innerHTML = rows.length
+      ? rows.slice(0, 250).map((x) => `<tr>
+          <td class="mono">${esc(x.user || "—")}</td>
+          <td>${esc(x.name || "—")}</td>
+          <td><span class="role-tag">${esc(x.role || "—")}</span></td>
+          <td class="mono muted-cell">${esc(x.ip || "—")}</td>
+          <td>${esc(x.device || "—")}</td>
+          <td class="nowrap">${esc(A.dateTR(x.at))}</td>
+        </tr>`).join("")
+      : '<tr><td colspan="6" class="empty-row">Kayıt yok.</td></tr>';
+  }
+
+  function renderVisits(){
+
+    const list = A.visits.all().slice().reverse();
+    const q = ($("#vis-search") ? $("#vis-search").value : "").toLowerCase().trim();
+    const rows = list.filter((x) => !q || ((x.page || "") + " " + (x.device || "") + " " + (x.ip || "")).toLowerCase().includes(q));
+    $("#vis-table").innerHTML = rows.length
+      ? rows.slice(0, 250).map((x) => `<tr>
+          <td class="mono">${esc(x.page || "—")}</td>
+          <td>${esc(x.device || "—")}</td>
+          <td class="mono muted-cell">${esc(x.ip || "—")}</td>
+          <td class="nowrap">${esc(A.dateTR(x.at))}</td>
+        </tr>`).join("")
+      : '<tr><td colspan="4" class="empty-row">Ziyaret kaydı yok.</td></tr>';
+  }
+
+  ["#log-search", "#vis-search"].forEach((sel) => {
+    const el = $(sel);
+    if (el) el.addEventListener("input", () => { sel === "#log-search" ? renderLogins() : renderVisits(); });
+  });
+  const logClearBtn = $("#log-clear");
+  if (logClearBtn) logClearBtn.addEventListener("click", () => {
+    if (!A.can("kayitlar.clear")) { A.toast("Bu işlem için iznin yok"); return; }
+    if (!confirm("Tüm yönetici giriş kayıtları silinecek. Emin misin?")) return;
+    A.clearLogins(); renderKayitKpi(); renderLogins(); A.toast("Yönetici kayıtları temizlendi");
+  });
+  const visClearBtn = $("#vis-clear");
+  if (visClearBtn) visClearBtn.addEventListener("click", () => {
+    if (!A.can("kayitlar.clear")) { A.toast("Bu işlem için iznin yok"); return; }
+    if (!confirm("Tüm ziyaretçi kayıtları silinecek. Emin misin?")) return;
+    A.clearVisits(); renderKayitKpi(); renderVisits(); A.toast("Ziyaretçi kayıtları temizlendi");
+  });
+
+  /* ---------- S.S.S ---------- */
+  let sssEditingId = null;
+
+  const SSS_ICONS = {
+    up: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="m6 11 6-6 6 6"/></svg>',
+    down: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="m6 13 6 6 6-6"/></svg>',
+    edit: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>',
+    del: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M6 6l1 14h10l1-14"/></svg>',
+  };
+
+  function renderSss(){
+    const list = A.sss.all();
+    const el = $("#sss-list");
+    if (!el) return;
+    const cnt = $("#sss-count");
+    if (cnt) cnt.textContent = list.length + " soru";
+    const empty = $("#sss-empty");
+    if (empty) empty.style.display = list.length ? "none" : "block";
+
+    el.innerHTML = list.map((x, i) => `
+      <div class="sss-item ${x.active === false ? "is-off" : ""}" data-sss-row="${x.id}">
+        <div class="sss-item-main">
+          <div class="sss-item-q">${esc(x.q || "(soru yok)")}</div>
+          <div class="sss-item-a">${esc(x.a || "(yanıt yok)")}</div>
+          <div class="sss-item-meta">
+            <span class="sss-tag ${x.active === false ? "is-off" : "is-on"}">${x.active === false ? "Yayında değil" : "Yayında"}</span>
+            ${x.pinned ? '<span class="sss-tag is-pin">Sabit</span>' : ""}
+            <span class="sss-item-at">${esc(A.dateTR(x.at))}</span>
+          </div>
+        </div>
+        <div class="sss-item-acts">
+          <button class="adm-btn sm ghost" data-sss-up="${x.id}" title="Yukarı taşı" ${i === 0 ? "disabled" : ""}>${SSS_ICONS.up}</button>
+          <button class="adm-btn sm ghost" data-sss-down="${x.id}" title="Aşağı taşı" ${i === list.length - 1 ? "disabled" : ""}>${SSS_ICONS.down}</button>
+          <button class="adm-btn sm" data-sss-edit="${x.id}" title="Düzenle">${SSS_ICONS.edit}</button>
+          <button class="adm-btn sm danger" data-sss-del="${x.id}" title="Sil">${SSS_ICONS.del}</button>
+        </div>
+      </div>`).join("");
+
+    lockDynamicButtons();
+  }
+
+  function openSssEditor(id){
+    const ed = $("#sss-editor");
+    if (!ed) return;
+    sssEditingId = id;
+    if (id) {
+      const x = A.sss.all().find((i) => i.id === id);
+      if (!x) return;
+      $("#sss-editor-title").textContent = "Soruyu düzenle";
+      $("#sss-q").value = x.q || "";
+      $("#sss-a").value = x.a || "";
+      $("#sss-active").checked = x.active !== false;
+      $("#sss-pinned").checked = !!x.pinned;
+    } else {
+      $("#sss-editor-title").textContent = "Yeni soru";
+      $("#sss-q").value = "";
+      $("#sss-a").value = "";
+      $("#sss-active").checked = true;
+      $("#sss-pinned").checked = false;
+    }
+    ed.style.display = "block";
+    ed.scrollIntoView({ behavior: "smooth", block: "center" });
+    try { $("#sss-q").focus(); } catch (e) {}
+  }
+  function closeSssEditor(){
+    const ed = $("#sss-editor");
+    if (ed) ed.style.display = "none";
+    sssEditingId = null;
+  }
+
+  const sssAddBtn = $("#sss-add");
+  if (sssAddBtn) sssAddBtn.addEventListener("click", () => {
+    if (!A.can("sss.edit")) { A.toast("Bu işlem için iznin yok"); return; }
+    openSssEditor(null);
+  });
+  const sssCancelBtn = $("#sss-cancel");
+  if (sssCancelBtn) sssCancelBtn.addEventListener("click", closeSssEditor);
+
+  const sssSaveBtn = $("#sss-save");
+  if (sssSaveBtn) sssSaveBtn.addEventListener("click", () => {
+    if (!A.can("sss.edit")) { A.toast("Bu işlem için iznin yok"); return; }
+    const q = String($("#sss-q").value || "").trim();
+    const a = String($("#sss-a").value || "").trim();
+    if (!q) { A.toast("Soru boş olamaz"); return; }
+    if (!a) { A.toast("Yanıt boş olamaz"); return; }
+    const patch = { q, a, active: !!$("#sss-active").checked, pinned: !!$("#sss-pinned").checked };
+    if (sssEditingId) A.sss.update(sssEditingId, patch);
+    else A.sss.add(patch);
+    closeSssEditor();
+    A.toast("S.S.S kaydedildi");
+    renderSss();
+  });
+
+  const sssListEl = $("#sss-list");
+  if (sssListEl) sssListEl.addEventListener("click", (e) => {
+    const b = e.target.closest("button");
+    if (!b) return;
+    const up = b.getAttribute("data-sss-up"), down = b.getAttribute("data-sss-down");
+    const edit = b.getAttribute("data-sss-edit"), del = b.getAttribute("data-sss-del");
+    if (up) {
+      if (!A.can("sss.edit")) { A.toast("Bu işlem için iznin yok"); return; }
+      A.sss.move(Number(up), -1); renderSss();
+    } else if (down) {
+      if (!A.can("sss.edit")) { A.toast("Bu işlem için iznin yok"); return; }
+      A.sss.move(Number(down), 1); renderSss();
+    } else if (edit) {
+      if (!A.can("sss.edit")) { A.toast("Bu işlem için iznin yok"); return; }
+      openSssEditor(Number(edit));
+    } else if (del) {
+      if (!A.can("sss.delete")) { A.toast("Bu işlem için iznin yok"); return; }
+      const x = A.sss.all().find((i) => i.id === Number(del));
+      if (!x) return;
+      if (!confirm('"' + x.q + '" sorusu silinecek. Emin misin?')) return;
+      A.sss.remove(Number(del));
+      A.toast("Soru silindi");
+      if (sssEditingId === Number(del)) closeSssEditor();
+      renderSss();
+    }
+  });
+
+  /* ---------- Redül: site renk düzeni ---------- */
+  const REDUL_MODES = { single: "Varsayılan", accent: "Vurgu", dual: "Çift renk" };
+
+  function hexToRgb(hex){
+    const h = String(hex || "").replace("#", "");
+    if (h.length !== 6) return null;
+    return [parseInt(h.slice(0,2),16), parseInt(h.slice(2,4),16), parseInt(h.slice(4,6),16)];
+  }
+  function mixHex(a, b, ratio){
+    const A = hexToRgb(a), B = hexToRgb(b);
+    if (!A || !B) return a;
+    const m = (i) => Math.round(A[i] + (B[i] - A[i]) * ratio);
+    return "#" + [m(0), m(1), m(2)].map((n) => n.toString(16).padStart(2, "0")).join("");
+  }
+  function rgba(hex, alpha){
+    const c = hexToRgb(hex);
+    return c ? `rgba(${c[0]},${c[1]},${c[2]},${alpha})` : hex;
+  }
+  function darker(hex, amt){ return mixHex(hex, "#000000", amt || 0.25); }
+  function lighter(hex, amt){ return mixHex(hex, "#ffffff", amt || 0.3); }
+  function validHex(v){ return /^#[0-9a-fA-F]{6}$/.test(String(v || "")); }
+
+  let redulDraft = null; /* kaydedilmeden önceki seçim */
+
+  function redulSettings(){
+    const st = A.settings.get();
+    return {
+      mode: st.colorMode || "single",
+      brand: st.colorBrand || "#8fe61a",
+      accent2: st.colorAccent2 || "#4fa8ff",
+    };
+  }
+
+  /* temayı önizleme kutusuna uygula */
+  function paintRedulPreview(cfg){
+    const box = $("#redul-preview");
+    if (!box) return;
+    box.style.setProperty("--pv-a", cfg.brand);
+    box.style.setProperty("--pv-a2", cfg.mode === "dual" ? cfg.accent2 : cfg.brand);
+    box.style.setProperty("--pv-a-soft", rgba(cfg.brand, 0.14));
+    box.style.setProperty("--pv-a-line", rgba(cfg.brand, 0.4));
+  }
+
+  function paintRedulCurrent(){
+    const cfg = redulDraft || redulSettings();
+    const el = $("#redul-current");
+    if (el) el.textContent = REDUL_MODES[cfg.mode] || "Varsayılan";
+    /* kart vurgusu */
+    document.querySelectorAll("#redul-presets .redul-card").forEach((c) => {
+      const same = c.getAttribute("data-brand") === cfg.brand &&
+        (cfg.mode === "dual" ? c.getAttribute("data-accent2") === cfg.accent2 : true) &&
+        ((cfg.mode === "dual") === (c.getAttribute("data-redul-mode") === "dual"));
+      c.classList.toggle("is-active", same);
+    });
+    /* mod butonlari */
+    document.querySelectorAll("#redul-modes .adm-tab").forEach((b) => b.classList.toggle("active", b.getAttribute("data-mode") === cfg.mode));
+    /* renk kutulari */
+    const b1 = $("#r-brand"), b2 = $("#r-accent"), h1 = $("#r-brand-hex"), h2 = $("#r-accent-hex");
+    if (b1) b1.value = cfg.brand;
+    if (h1) h1.value = cfg.brand;
+    if (b2) b2.value = cfg.accent2;
+    if (h2) h2.value = cfg.accent2;
+    paintRedulPreview(cfg);
+  }
+
+  function fillRedul(){
+    const cfg = redulSettings();
+    redulDraft = { mode: cfg.mode, brand: cfg.brand, accent2: cfg.accent2 };
+    paintRedulCurrent();
+  }
+
+  function setRedulDraft(patch){
+    redulDraft = Object.assign({}, redulDraft || redulSettings(), patch);
+    paintRedulCurrent();
+  }
+
+  /* --- şablon kartları --- */
+  document.querySelectorAll("#redul-presets .redul-card").forEach((card) => {
+    card.addEventListener("click", () => {
+      if (!A.can("redul.edit")) { A.toast("Bu işlem için iznin yok"); return; }
+      setRedulDraft({
+        mode: card.getAttribute("data-redul-mode") || "single",
+        brand: card.getAttribute("data-brand") || "#8fe61a",
+        accent2: card.getAttribute("data-accent2") || "",
+      });
+    });
+  });
+
+  /* --- mod butonları --- */
+  document.querySelectorAll("#redul-modes .adm-tab").forEach((b) => {
+    b.addEventListener("click", () => {
+      if (!A.can("redul.edit")) { A.toast("Bu işlem için iznin yok"); return; }
+      const mode = b.getAttribute("data-mode");
+      const patch = { mode };
+      if (mode === "dual" && (!redulDraft || !redulDraft.accent2)) patch.accent2 = "#4fa8ff";
+      setRedulDraft(patch);
+    });
+  });
+
+  /* --- renk seçiciler --- */
+  [["#r-brand", "#r-brand-hex", "brand"], ["#r-accent", "#r-accent-hex", "accent2"]].forEach(([picker, text, key]) => {
+    const pEl = $(picker), tEl = $(text);
+    if (pEl) pEl.addEventListener("input", () => { if (tEl) tEl.value = pEl.value; setRedulDraft({ [key]: pEl.value }); });
+    if (tEl) tEl.addEventListener("input", () => {
+      let v = String(tEl.value || "").trim();
+      if (v && v.charAt(0) !== "#") v = "#" + v;
+      if (validHex(v)) { if (pEl) pEl.value = v; setRedulDraft({ [key]: v }); }
+    });
+  });
+
+  /* --- kaydet / vazgeç / varsayılan --- */
+  const saveRedulBtn = $("#redul-save");
+  if (saveRedulBtn) saveRedulBtn.addEventListener("click", () => {
+    if (!A.can("redul.edit")) { A.toast("Bu işlem için iznin yok"); return; }
+    const cfg = redulDraft || redulSettings();
+    if (!validHex(cfg.brand)) { A.toast("Ana renk geçersiz"); return; }
+    if (cfg.mode === "dual" && !validHex(cfg.accent2)) { A.toast("İkinci renk geçersiz"); return; }
+    A.settings.save({
+      colorMode: cfg.mode,
+      colorBrand: cfg.brand,
+      colorAccent2: cfg.mode === "dual" ? cfg.accent2 : "",
+    });
+    /* panelin kendisi de yeni rengi hemen alsın */
+    try { if (window.ADVColor) window.ADVColor.apply(); } catch (e) {}
+    A.toast("Renk düzeni kaydedildi");
+    paintRedulCurrent();
+    renderAll();
+  });
+
+  const cancelRedulBtn = $("#redul-cancel");
+  if (cancelRedulBtn) cancelRedulBtn.addEventListener("click", () => { fillRedul(); A.toast("Değişiklik geri alındı"); });
+
+  const resetRedulBtn = $("#redul-reset");
+  if (resetRedulBtn) resetRedulBtn.addEventListener("click", () => {
+    if (!A.can("redul.edit")) { A.toast("Bu işlem için iznin yok"); return; }
+    if (!confirm("Renk düzeni varsayılana (yeşil, tek renk) dönecek. Emin misin?")) return;
+    A.settings.save({ colorMode: "single", colorBrand: "#8fe61a", colorAccent2: "" });
+    try { if (window.ADVColor) window.ADVColor.apply(); } catch (e) {}
+    fillRedul();
+    A.toast("Varsayılan renk geri yüklendi");
+  });
+
+
+  /* ---------- Redül: arka plan renkleri ---------- */
+  const BG_KEYS = ["bg", "surface", "surface2", "line", "ink", "muted"];
+  let bgDraft = null;
+
+  function fillBg(){
+    const cur = A.bg.get();
+    bgDraft = Object.assign({}, cur);
+    BG_KEYS.forEach((k) => {
+      const picker = $("#bg-" + k), hex = $("#bg-" + k + "-hex");
+      if (picker && cur[k]) picker.value = cur[k];
+      if (hex) hex.value = cur[k] || "";
+    });
+  }
+  function setBgDraft(key, value){
+    bgDraft = Object.assign({}, bgDraft || A.bg.get());
+    bgDraft[key] = value;
+  }
+
+  BG_KEYS.forEach((k) => {
+    const picker = $("#bg-" + k), hex = $("#bg-" + k + "-hex");
+    if (picker) picker.addEventListener("input", () => { if (hex) hex.value = picker.value; setBgDraft(k, picker.value); });
+    if (hex) hex.addEventListener("input", () => {
+      let v = String(hex.value || "").trim();
+      if (v && v.charAt(0) !== "#") v = "#" + v;
+      if (validHex(v)) { if (picker) picker.value = v; setBgDraft(k, v); }
+    });
+  });
+
+  document.querySelectorAll("[data-clear]").forEach((b) => {
+    b.addEventListener("click", () => {
+      if (!A.can("redul.edit")) { A.toast("Bu işlem için iznin yok"); return; }
+      const k = b.getAttribute("data-clear");
+      setBgDraft(k, "");
+      const picker = $("#bg-" + k), hex = $("#bg-" + k + "-hex");
+      if (hex) hex.value = "";
+      if (picker) picker.value = "#000000";
+      A.toast("Tema rengine döndürülecek");
+    });
+  });
+
+  const bgSaveBtn = $("#bg-save");
+  if (bgSaveBtn) bgSaveBtn.addEventListener("click", () => {
+    if (!A.can("redul.edit")) { A.toast("Bu işlem için iznin yok"); return; }
+    A.bg.set(bgDraft || {});
+    try { if (window.ADVColor) window.ADVColor.apply(); } catch (e) {}
+    A.toast("Arka plan renkleri kaydedildi");
+    fillBg();
+  });
+  const bgCancelBtn = $("#bg-cancel");
+  if (bgCancelBtn) bgCancelBtn.addEventListener("click", () => { fillBg(); A.toast("Değişiklik geri alındı"); });
+  const bgResetBtn = $("#bg-reset");
+  if (bgResetBtn) bgResetBtn.addEventListener("click", () => {
+    if (!A.can("redul.edit")) { A.toast("Bu işlem için iznin yok"); return; }
+    if (!confirm("Arka plan renkleri temanın kendi renklerine dönecek. Emin misin?")) return;
+    A.bg.reset();
+    try { if (window.ADVColor) window.ADVColor.apply(); } catch (e) {}
+    fillBg();
+    A.toast("Arka plan sıfırlandı");
+  });
+
+  /* ---------- Metül: yazı tipi / renk / boyut ---------- */
+  const FONTS = {
+    varsayilan: "",
+    grotesk: "'Poppins',system-ui,-apple-system,'Segoe UI',sans-serif",
+    inter: "'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif",
+    serif: "Georgia,'Times New Roman',Times,serif",
+    mono: "ui-monospace,'Cascadia Mono',Consolas,monospace",
+    system: "system-ui,-apple-system,'Segoe UI',Roboto,sans-serif",
+  };
+  let mtDraft = null;
+
+  function loadFontLink(url){
+    if (!url || !/^https:\/\/fonts\.googleapis\.com\//.test(url)) return;
+    if (document.querySelector('link[data-adv-font="1"]')) return;
+    const l = document.createElement("link");
+    l.rel = "stylesheet";
+    l.href = url;
+    l.setAttribute("data-adv-font", "1");
+    document.head.appendChild(l);
+  }
+  function fontFamilyFor(cfg){
+    const custom = String(cfg.customFont || "").trim();
+    if (custom) {
+      if (/^https?:\/\//.test(custom)) {
+        const m = custom.match(/family=([^:&]+)/g);
+        if (m && m.length) {
+          const first = m[0].replace("family=", "").split(":")[0].replace(/\+/g, " ");
+          return "'" + first + "',system-ui,sans-serif";
+        }
+        return FONTS.varsayilan;
+      }
+      return "'" + custom.replace(/'/g, "") + "',system-ui,sans-serif";
+    }
+    return FONTS[cfg.font] || "";
+  }
+  function paintMetul(){
+    const cfg = mtDraft || A.text.get();
+    const box = $("#metul-preview");
+    if (!box) return;
+    const fam = fontFamilyFor(cfg);
+    box.style.fontFamily = fam || "";
+    box.style.fontSize = cfg.scale + "%";
+    box.style.fontWeight = String(cfg.weight);
+    box.style.lineHeight = String(cfg.line);
+    if (cfg.ink) box.style.color = cfg.ink; else box.style.color = "";
+    if (cfg.muted) box.style.setProperty("--mt-muted", cfg.muted); else box.style.removeProperty("--mt-muted");
+    /* etiketler */
+    $("#mt-size-val").textContent = cfg.scale + "%";
+    $("#mt-weight-val").textContent = String(cfg.weight);
+    $("#mt-line-val").textContent = String(cfg.line).replace(".", ",");
+    /* font kartlari */
+    document.querySelectorAll("#metul-fonts .metul-font").forEach((c) => {
+      c.classList.toggle("is-active", !String(cfg.customFont || "").trim() && c.getAttribute("data-font") === cfg.font);
+    });
+    const cur = $("#metul-current");
+    if (cur) cur.textContent = (cfg.customFont || "").trim() ? "Özel yazı tipi" : (cfg.font === "varsayilan" ? "Varsayılan" : cfg.font.charAt(0).toUpperCase() + cfg.font.slice(1));
+  }
+  function fillMetul(){
+    const cfg = A.text.get();
+    mtDraft = Object.assign({}, cfg);
+    const ink = $("#mt-ink"), inkHex = $("#mt-ink-hex"), mu = $("#mt-muted"), muHex = $("#mt-muted-hex");
+    if (ink && cfg.ink) ink.value = cfg.ink;
+    if (inkHex) inkHex.value = cfg.ink || "";
+    if (mu && cfg.muted) mu.value = cfg.muted;
+    if (muHex) muHex.value = cfg.muted || "";
+    const sz = $("#mt-size"), wt = $("#mt-weight"), ln = $("#mt-line"), cf = $("#m-custom-font");
+    if (sz) sz.value = cfg.scale;
+    if (wt) wt.value = cfg.weight;
+    if (ln) ln.value = cfg.line;
+    if (cf) cf.value = cfg.customFont || "";
+    paintMetul();
+  }
+
+  document.querySelectorAll("#metul-fonts .metul-font").forEach((c) => {
+    c.addEventListener("click", () => {
+      if (!A.can("metul.edit")) { A.toast("Bu işlem için iznin yok"); return; }
+      mtDraft = Object.assign({}, mtDraft || A.text.get(), { font: c.getAttribute("data-font"), customFont: "" });
+      const cf = $("#m-custom-font"); if (cf) cf.value = "";
+      paintMetul();
+    });
+  });
+  [["#mt-size", "scale", (x) => x + "%"], ["#mt-weight", "weight", (x) => String(x)], ["#mt-line", "line", (x) => String(x).replace(".", ",")]].forEach(([sel, key]) => {
+    const el = $(sel);
+    if (el) el.addEventListener("input", () => {
+      const raw = el.value;
+      mtDraft = Object.assign({}, mtDraft || A.text.get());
+      mtDraft[key] = key === "scale" || key === "weight" ? Number(raw) : Number(raw);
+      paintMetul();
+    });
+  });
+  [["#mt-ink", "#mt-ink-hex", "ink"], ["#mt-muted", "#mt-muted-hex", "muted"]].forEach(([picker, text, key]) => {
+    const pEl = $(picker), tEl = $(text);
+    if (pEl) pEl.addEventListener("input", () => { if (tEl) tEl.value = pEl.value; mtDraft = Object.assign({}, mtDraft || A.text.get(), { [key]: pEl.value }); paintMetul(); });
+    if (tEl) tEl.addEventListener("input", () => {
+      let v = String(tEl.value || "").trim();
+      if (v && v.charAt(0) !== "#") v = "#" + v;
+      if (validHex(v)) { if (pEl) pEl.value = v; mtDraft = Object.assign({}, mtDraft || A.text.get(), { [key]: v }); paintMetul(); }
+    });
+  });
+  document.querySelectorAll("[data-mtclear]").forEach((b) => {
+    b.addEventListener("click", () => {
+      if (!A.can("metul.edit")) { A.toast("Bu işlem için iznin yok"); return; }
+      const k = b.getAttribute("data-mtclear");
+      mtDraft = Object.assign({}, mtDraft || A.text.get(), { [k]: "" });
+      const hex = $((k === "ink" ? "#mt-ink" : "#mt-muted") + "-hex");
+      if (hex) hex.value = "";
+      paintMetul();
+    });
+  });
+
+  const mtSaveBtn = $("#metul-save");
+  if (mtSaveBtn) mtSaveBtn.addEventListener("click", () => {
+    if (!A.can("metul.edit")) { A.toast("Bu işlem için iznin yok"); return; }
+    const cfg = mtDraft || A.text.get();
+    loadFontLink(String(cfg.customFont || "").trim());
+    A.text.set(cfg);
+    try { if (window.ADVText) window.ADVText.apply(); } catch (e) {}
+    A.toast("Metül kaydedildi");
+    paintMetul();
+  });
+  const mtCancelBtn = $("#metul-cancel");
+  if (mtCancelBtn) mtCancelBtn.addEventListener("click", () => { fillMetul(); A.toast("Değişiklik geri alındı"); });
+  const mtResetBtn = $("#metul-reset");
+  if (mtResetBtn) mtResetBtn.addEventListener("click", () => {
+    if (!A.can("metul.edit")) { A.toast("Bu işlem için iznin yok"); return; }
+    if (!confirm("Yazı tipi, renk ve boyut varsayılana dönecek. Emin misin?")) return;
+    A.text.reset();
+    try { if (window.ADVText) window.ADVText.apply(); } catch (e) {}
+    fillMetul();
+    A.toast("Metül sıfırlandı");
+  });
+
+  /* panele girerken formu doldur */
+  const REDUL_TAB = document.querySelector('#adm-nav a[data-tab="redul"]');
+  if (REDUL_TAB) REDUL_TAB.addEventListener("click", () => setTimeout(() => { fillRedul(); fillBg(); }, 0));
+  const METUL_TAB = document.querySelector('#adm-nav a[data-tab="metul"]');
+  if (METUL_TAB) METUL_TAB.addEventListener("click", () => setTimeout(fillMetul, 0));
+  const SSS_TAB = document.querySelector('#adm-nav a[data-tab="sss"]');
+  if (SSS_TAB) SSS_TAB.addEventListener("click", () => setTimeout(renderSss, 0));
+  /* Kayıtlar sekmesi: iki liste tek panelde */
+  const KAYIT_TAB = document.querySelector('#adm-nav a[data-tab="kayitlar"]');
+  if (KAYIT_TAB) KAYIT_TAB.addEventListener("click", () => setTimeout(() => { renderKayitKpi(); renderLogins(); renderVisits(); }, 0));
+
+  /* ---------- dashboard ---------- */
+  const DAY = 86400000;
+  function dayKey(d){ return new Date(d).toISOString().slice(0, 10); }
+  function withinDays(iso, days){
+    const t = new Date(iso).getTime();
+    return !!t && (Date.now() - t) <= days * DAY;
+  }
+  function sumDays(list, days){
+    return list.filter((x) => x && x.at && withinDays(x.at, days)).length;
+  }
+  function pct(current, previous){
+    if (!previous) return current ? "+100%" : "0%";
+    const d = Math.round(((current - previous) / previous) * 100);
+    return (d > 0 ? "+" : "") + d + "%";
+  }
+  function trendClass(txt){
+    if (txt === "0%") return "flat";
+    return txt.charAt(0) === "-" ? "down" : "up";
+  }
+  function svgIcon(paths){
+    return '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">' + paths + "</svg>";
+  }
+
+
+
+  function renderStats() {
+    const R = {
+      notices: A.can("notices.view"),
+      gallery: A.can("gallery.view"),
+      products: A.can("products.view"),
+      messages: A.can("messages.view"),
+      team: A.can("team.view"),
+      accounts: A.can("accounts.view"),
+      banip: A.can("banip.view"),
+    };
+    const me = A.whoami() || {};
+    const who = me.email ? (me.name && me.name !== me.email ? me.name : me.email) : "Yönetici";
+
+    /* --- karşılama --- */
+    const hello = $("#dash-hello");
+    if (hello) hello.textContent = who;
+    const whoPill = $("#dash-who");
+    if (whoPill) whoPill.textContent = me.role || "OWNER";
+
+    const st = A.settings.get();
+    const serverIp = (st.serverIp || "95.173.173.124:27015");
+    const ipEl = $("#dash-server-ip");
+    if (ipEl) ipEl.textContent = serverIp;
+
+    const maint = !!st.maintenance;
+    const siteStatus = $("#dash-site-status");
+    if (siteStatus) {
+      siteStatus.textContent = maint ? "Bakım modu" : "Yayında";
+      siteStatus.className = "dash-hero-value " + (maint ? "is-warn" : "is-ok");
+    }
+
+    const visits = A.visits.stats();
+    const logins = A.logins.stats();
+
+    const lastLogin = $("#dash-last-login");
+    if (lastLogin) lastLogin.textContent = logins.last ? A.dateTR(logins.last) : "Kayıt yok";
+
+    const sub = $("#dash-hero-sub");
+    if (sub) {
+      sub.textContent = visits.day
+        ? "Bugün " + visits.day + " ziyaret · " + (st.siteName || "Advanced") + " paneli"
+        : "Bugün henüz ziyaret kaydı yok · " + (st.siteName || "Advanced") + " paneli";
+    }
+
+    /* --- uyarılar --- */
+    const alerts = [];
+    if (maint) alerts.push({ tone: "warn", text: "Bakım modu açık — site ziyaretçilere kapalı.", goto: "modul" });
+    const unread = R.messages ? A.messages.all().filter((m) => !m.read).length : 0;
+    if (unread) alerts.push({ tone: "info", text: unread + " okunmamış mesaj var.", goto: "mesajlar" });
+    const bans = R.banip ? A.bans.all() : [];
+    if (bans.length) alerts.push({ tone: "info", text: bans.length + " IP banlı durumda.", goto: "banip" });
+    const noProd = R.products && !A.products.all().filter((x) => x.active !== false).length;
+    if (noProd) alerts.push({ tone: "warn", text: "Fiyatlandırmada aktif ürün yok.", goto: "fiyatlandirma" });
+    if (!alerts.length) alerts.push({ tone: "ok", text: "Her şey yolunda — bekleyen iş yok.", goto: "dashboard" });
+
+    const alertsEl = $("#dash-alerts");
+    if (alertsEl) {
+      alertsEl.innerHTML = alerts.map((x) => {
+        const icon = x.tone === "ok"
+          ? svgIcon('<path d="M20 6 9 17l-5-5"/>')
+          : svgIcon('<circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.01"/>');
+        return '<button class="dash-alert is-' + x.tone + '" data-goto="' + x.goto + '">' + icon + "<span>" + esc(x.text) + "</span></button>";
+      }).join("");
+    }
+
+    /* --- KPI: duyurular --- */
+    const notices = R.notices ? A.notices.all() : [];
+    const noticesNew = sumDays(notices, 30), noticesPrev = sumDays(notices, 60) - noticesNew;
+    if (R.notices) {
+      $("#kpi-notices").textContent = notices.length;
+      const tr = pct(noticesNew, noticesPrev);
+      const trEl = $("#kpi-notices-trend");
+      trEl.textContent = tr; trEl.className = "dash-kpi-trend " + trendClass(tr);
+      const pinned = notices.filter((n) => n.pinned).length;
+      $("#kpi-notices-foot").textContent = pinned + " sabit · son 30 günde " + noticesNew + " yeni";
+    }
+
+    const gallery = R.gallery ? A.gallery.all() : [];
+    if (R.gallery) {
+      const gNew = sumDays(gallery, 30), gPrev = sumDays(gallery, 60) - gNew;
+      $("#kpi-gallery").textContent = gallery.length;
+      const tr = pct(gNew, gPrev);
+      const trEl = $("#kpi-gallery-trend");
+      trEl.textContent = tr; trEl.className = "dash-kpi-trend " + trendClass(tr);
+      $("#kpi-gallery-foot").textContent = "son 30 günde " + gNew + " yeni fotoğraf";
+    }
+
+    const products = R.products ? A.products.all() : [];
+    if (R.products) {
+      const active = products.filter((p) => p.active !== false);
+      const pNew = sumDays(products, 30), pPrev = sumDays(products, 60) - pNew;
+      $("#kpi-products").textContent = active.length;
+      const tr = pct(pNew, pPrev);
+      const trEl = $("#kpi-products-trend");
+      trEl.textContent = tr; trEl.className = "dash-kpi-trend " + trendClass(tr);
+      const cheapest = active.length ? Math.min.apply(null, active.map((p) => Number(String(p.price || "0").replace(/[^\d.]/g, "")) || 0)) : 0;
+      $("#kpi-products-foot").textContent = active.length ? ("en düşük " + cheapest + " TL") : "ürün eklenmemiş";
+    }
+
+    const messages = R.messages ? A.messages.all() : [];
+    if (R.messages) {
+      const unread30 = messages.filter((m) => !m.read && withinDays(m.at, 30)).length;
+      const prev30 = messages.filter((m) => withinDays(m.at, 60) && !withinDays(m.at, 30)).length;
+      $("#kpi-messages").textContent = unread;
+      const tr = pct(unread30, prev30);
+      const trEl = $("#kpi-messages-trend");
+      trEl.textContent = tr; trEl.className = "dash-kpi-trend " + trendClass(tr);
+      $("#kpi-messages-foot").textContent = messages.length + " toplam mesaj · " + (messages.length - unread) + " okundu";
+    }
+
+    /* --- grafik: son 14 gün --- */
+    const visitList = A.visits.all ? A.visits.all() : [];
+    const buckets = {};
+    for (let i = 13; i >= 0; i--) buckets[dayKey(Date.now() - i * DAY)] = 0;
+    visitList.forEach((v) => {
+      if (!v || !v.at) return;
+      const k = dayKey(v.at);
+      if (k in buckets) buckets[k]++;
+    });
+    const keys = Object.keys(buckets);
+    const max = Math.max(1, Math.max.apply(null, keys.map((k) => buckets[k])));
+    const chart = $("#dash-chart");
+    if (chart) {
+      chart.innerHTML = keys.map((k) => {
+        const n = buckets[k];
+        const h = Math.max(3, Math.round((n / max) * 100));
+        return '<div class="dash-bar" title="' + k + " · " + n + ' ziyaret"><i style="height:' + h + '%"></i><span>' + n + "</span></div>";
+      }).join("");
+    }
+    const axis = $("#dash-chart-axis");
+    if (axis) {
+      axis.innerHTML = keys.map((k) => {
+        const d = new Date(k + "T00:00:00");
+        return "<span>" + d.getDate() + "</span>";
+      }).join("");
+    }
+    const chartTotal = $("#chart-total");
+    if (chartTotal) chartTotal.textContent = keys.reduce((acc, k) => acc + buckets[k], 0) + " ziyaret";
+
+    $("#st-visits-total").textContent = visits.total;
+    $("#st-visits-month").textContent = visits.month;
+    $("#st-visits-week").textContent = visits.week;
+    $("#st-visits-day").textContent = visits.day;
+    $("#st-avg-time").textContent = visits.avgLabel;
+    $("#st-avg-badge").textContent = visits.avgMinutes >= 60 ? "saat" : "dakika";
+
+    $("#st-logins-total").textContent = logins.total;
+    $("#st-logins-month").textContent = logins.month;
+    $("#st-logins-week").textContent = logins.week;
+    $("#st-logins-day").textContent = logins.day;
+    const lastEl = $("#st-last-login");
+    if (lastEl) lastEl.textContent = logins.last ? A.dateTR(logins.last) : "Kayıt yok";
+
+    /* --- moderasyon --- */
+    if (R.team && $("#st-team")) {
+      const team = A.team.all();
+      const pins = team.filter((t) => t.pinned).length;
+      $("#st-team").textContent = team.length;
+      $("#kpi-team-foot").textContent = pins + " sabitlenmiş üye";
+    }
+    if (R.accounts && $("#st-accounts")) {
+      const accounts = A.accounts.all();
+      const owners = accounts.filter((x) => String(x.role || "").toUpperCase() === "OWNER").length;
+      $("#st-accounts").textContent = accounts.length;
+      $("#kpi-accounts-foot").textContent = owners + " OWNER · " + (accounts.length - owners) + " diğer";
+    }
+    if (R.banip && $("#st-bans")) {
+      $("#st-bans").textContent = bans.length;
+      const hist = A.banHistory.all();
+      $("#kpi-bans-foot").textContent = hist.length + " geçmiş kayıt";
+    }
+
+    /* --- son hareketler --- */
+    const feed = [];
+    if (R.notices) notices.slice(0, 4).forEach((n) => feed.push({ at: n.date || n.at, tone: "blue", icon: '<path d="M4 5h16v11H8l-4 4z"/><path d="M8 9h8M8 12.5h5"/>', title: n.title, meta: "Duyuru yayınlandı", goto: "duyurular" }));
+    if (R.gallery) gallery.slice(0, 3).forEach((g) => feed.push({ at: g.at, tone: "green", icon: '<rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.6"/><path d="m4 17 5-5 4 4 3-3 4 4"/>', title: g.title, meta: "Galeriye fotoğraf", goto: "galeri" }));
+    if (R.messages) messages.slice(0, 4).forEach((m) => feed.push({ at: m.at, tone: m.read ? "muted" : "amber", icon: '<path d="M21 11.5a8.5 8.5 0 0 1-12.4 7.6L3 21l1.9-5.6A8.5 8.5 0 1 1 21 11.5z"/>', title: m.nick || "Ziyaretçi", meta: m.read ? "Mesaj okundu" : "Yeni mesaj", goto: "mesajlar" }));
+    if (R.banip) A.banHistory.all().slice(0, 4).forEach((h) => feed.push({ at: h.at, tone: h.action === "ban" ? "red" : "green", icon: h.action === "ban" ? '<circle cx="12" cy="12" r="9"/><path d="M5.6 5.6 18.4 18.4"/>' : '<path d="M20 6 9 17l-5-5"/>', title: h.ip, meta: h.action === "ban" ? "IP banlandı" : "Ban kaldırıldı", goto: "banip" }));
+    if (R.accounts) A.accounts.all().slice(0, 3).forEach((x) => feed.push({ at: x.at, tone: "violet", icon: '<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>', title: x.name || x.email, meta: "Yönetici hesabı (" + (x.role || "—") + ")", goto: "yoneticiler" }));
+
+    feed.sort((x, y) => new Date(y.at || 0) - new Date(x.at || 0));
+    const feedList = feed.filter((x) => x.at).slice(0, 8);
+    const feedEl = $("#dash-feed");
+    if (feedEl) {
+      feedEl.innerHTML = feedList.length
+        ? feedList.map((x) => '<button class="dash-feed-item" data-goto="' + x.goto + '">' +
+            '<span class="dash-feed-icon is-' + x.tone + '">' + svgIcon(x.icon) + "</span>" +
+            '<span class="dash-feed-body"><b>' + esc(x.title || "—") + "</b><i>" + esc(x.meta) + "</i></span>" +
+            '<span class="dash-feed-at">' + esc(A.dateTR(x.at)) + "</span></button>").join("")
+        : '<div class="empty-row">Hareket kaydı yok.</div>';
+    }
+    const fc = $("#dash-activity-count");
+    if (fc) fc.textContent = feedList.length + " kayıt";
+
+    /* ban sayacı her panelde güncel kalsın */
+    try { $("#st-bans").textContent = A.bans.all().length; } catch (e) {}
+    lockDynamicButtons();
+  }
+
+  /* ---------- duyurular ---------- */
+  function renderNotices() {
+    let list = A.ensurePinned(A.notices.all());
+    const q = ($("#notice-search").value || "").toLowerCase().trim();
+    list = A.sortPinned(list, "date");
+    if (q) list = list.filter((n) => (n.title + " " + n.summary).toLowerCase().includes(q));
+    list = list.slice(0, 250);
+
+    $("#notices-table").innerHTML =
+      list
+        .map(
+          (n) => `<tr class="${n.pinned ? "row-pinned" : ""}">
+          <td><button class="pin-btn ${n.pinned ? "on" : ""}" data-pin-notice="${n.id}" title="${n.pinned ? "Sabitlemeyi kaldır" : "Sabitle"}">${PIN_ICON}</button></td>
+          <td class="mono">${A.dateTR(n.date)}</td>
+          <td><strong>${esc(n.title)}</strong><div style="font-size:.75rem">${esc(n.summary).slice(0, 80)}</div></td>
+          <td>${n.pinned ? '<span class="pill">Sabit</span>' : state.noticeView === "history" ? "Geçmiş" : "Yayında"}</td>
+          <td>
+            <button class="adm-btn sm" data-edit-notice="${n.id}">Düzenle</button>
+            <button class="adm-btn sm danger" data-del-notice="${n.id}">Sil</button>
+          </td>
+        </tr>`
+        )
+        .join("") || '<tr><td colspan="5" style="color:var(--muted)">Duyuru yok.</td></tr>';
+
+    document.querySelectorAll("[data-pin-notice]").forEach((b) =>
+      b.addEventListener("click", () => {
+        const id = Number(b.getAttribute("data-pin-notice"));
+        const all = A.ensurePinned(A.notices.all()).map((x) => (x.id === id ? { ...x, pinned: !x.pinned } : x));
+        A.notices.save(all);
+        renderAll();
+        A.toast("Sabitleme güncellendi");
+      })
+    );
+    document.querySelectorAll("[data-edit-notice]").forEach((b) =>
+      b.addEventListener("click", () => {
+        const n = A.notices.all().find((x) => x.id === Number(b.getAttribute("data-edit-notice")));
+        if (!n) return;
+        $("#n-id").value = n.id;
+        $("#n-title").value = n.title;
+        $("#n-date").value = n.date;
+        $("#n-summary").value = n.summary;
+        $("#n-body").value = n.body || "";
+        $("#n-pinned").checked = !!n.pinned;
+        $("#notice-editor-title").textContent = "Duyuruyu düzenle";
+        $("#notice-editor").style.display = "block";
+        $("#notice-editor").scrollIntoView({ behavior: "smooth", block: "center" });
+      })
+    );
+    document.querySelectorAll("[data-del-notice]").forEach((b) =>
+      b.addEventListener("click", () => {
+        if (!confirm("Bu duyuru silinsin mi?")) return;
+        A.notices.save(A.notices.all().filter((x) => x.id !== Number(b.getAttribute("data-del-notice"))));
+        renderAll();
+        A.toast("Duyuru silindi");
+      })
+    );
+      lockDynamicButtons();
+  }
+  bindViewTabs("#notice-tabs", "noticeView", renderNotices);
+  $("#notice-search").addEventListener("input", renderNotices);
+  $("#new-notice").addEventListener("click", () => {
+    $("#n-id").value = "";
+    $("#n-title").value = "";
+    $("#n-date").value = new Date().toISOString().slice(0, 10);
+    $("#n-summary").value = "";
+    $("#n-body").value = "";
+    $("#n-pinned").checked = false;
+    $("#notice-editor-title").textContent = "Yeni duyuru";
+    $("#notice-editor").style.display = "block";
+  });
+  $("#cancel-notice").addEventListener("click", () => ($("#notice-editor").style.display = "none"));
+  $("#save-notice").addEventListener("click", () => {
+    const title = $("#n-title").value.trim();
+    const date = $("#n-date").value || new Date().toISOString().slice(0, 10);
+    const summary = $("#n-summary").value.trim();
+    const body = $("#n-body").value.trim();
+    const pinned = $("#n-pinned").checked;
+    if (!title || !summary) return A.toast("Başlık ve özet zorunlu");
+    const list = A.ensurePinned(A.notices.all());
+    const id = Number($("#n-id").value);
+    if (id) {
+      const i = list.findIndex((x) => x.id === id);
+      list[i] = { ...list[i], title, date, summary, body, pinned };
+    } else {
+      list.push({ id: Date.now(), title, date, summary, body, author: "admin", pinned });
+    }
+    A.notices.save(list);
+    $("#notice-editor").style.display = "none";
+    renderAll();
+    A.toast("Duyuru kaydedildi");
+  });
+
+  /* ---------- galeri ---------- */
+  function renderGallery() {
+    let list = A.sortPinned(A.ensurePinned(A.gallery.all()), "date");
+    list = list.slice(0, 250);
+    $("#gallery-table").innerHTML =
+      list
+        .map(
+          (g) => `<tr class="${g.pinned ? "row-pinned" : ""}">
+          <td><button class="pin-btn ${g.pinned ? "on" : ""}" data-pin-photo="${g.id}" title="${g.pinned ? "Sabitlemeyi kaldır" : "Sabitle"}">${PIN_ICON}</button></td>
+          <td><img src="${esc(g.src)}" alt="" style="width:64px;height:40px;object-fit:cover;border-radius:6px" /></td>
+          <td><strong>${esc(g.title)}</strong></td>
+          <td>${esc(g.tag)}</td>
+          <td>${g.pinned ? '<span class="pill">Sabit</span>' : state.galleryView === "history" ? "Geçmiş" : "Yayında"}</td>
+          <td>
+            <button class="adm-btn sm" data-edit-photo="${g.id}">Düzenle</button>
+            <button class="adm-btn sm danger" data-del-photo="${g.id}">Sil</button>
+          </td>
+        </tr>`
+        )
+        .join("") || '<tr><td colspan="6" style="color:var(--muted)">Görsel yok.</td></tr>';
+
+    document.querySelectorAll("[data-pin-photo]").forEach((b) =>
+      b.addEventListener("click", () => {
+        const id = Number(b.getAttribute("data-pin-photo"));
+        A.gallery.save(A.ensurePinned(A.gallery.all()).map((x) => (x.id === id ? { ...x, pinned: !x.pinned } : x)));
+        renderAll();
+        A.toast("Sabitleme güncellendi");
+      })
+    );
+    document.querySelectorAll("[data-edit-photo]").forEach((b) =>
+      b.addEventListener("click", () => {
+        const g = A.gallery.all().find((x) => x.id === Number(b.getAttribute("data-edit-photo")));
+        if (!g) return;
+        $("#g-id").value = g.id;
+        $("#g-title").value = g.title;
+        $("#g-tag").value = g.tag;
+        $("#g-src").value = g.src;
+        $("#g-pinned").checked = !!g.pinned;
+        $("#photo-editor").style.display = "block";
+        $("#photo-editor").scrollIntoView({ behavior: "smooth", block: "center" });
+      })
+    );
+    document.querySelectorAll("[data-del-photo]").forEach((b) =>
+      b.addEventListener("click", () => {
+        if (!confirm("Bu görsel silinsin mi?")) return;
+        A.gallery.save(A.gallery.all().filter((x) => x.id !== Number(b.getAttribute("data-del-photo"))));
+        renderAll();
+        A.toast("Görsel silindi");
+      })
+    );
+      lockDynamicButtons();
+  }
+  bindViewTabs("#gallery-tabs", "galleryView", renderGallery);
+  $("#new-photo").addEventListener("click", () => {
+    ["#g-id", "#g-title", "#g-tag", "#g-src"].forEach((s) => ($(s).value = ""));
+    $("#g-file").value = "";
+    $("#g-pinned").checked = false;
+    $("#photo-editor").style.display = "block";
+  });
+  $("#cancel-photo").addEventListener("click", () => ($("#photo-editor").style.display = "none"));
+  $("#g-file").addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => ($("#g-src").value = reader.result);
+    reader.readAsDataURL(file);
+  });
+  $("#save-photo").addEventListener("click", () => {
+    const title = $("#g-title").value.trim();
+    const tag = $("#g-tag").value.trim() || "galeri";
+    const src = $("#g-src").value.trim();
+    const pinned = $("#g-pinned").checked;
+    if (!title || !src) return A.toast("Başlık ve görsel gerekli");
+    const list = A.ensurePinned(A.gallery.all());
+    const id = Number($("#g-id").value);
+    if (id) {
+      const i = list.findIndex((x) => x.id === id);
+      list[i] = { ...list[i], title, tag, src, pinned };
+    } else {
+      list.push({ id: Date.now(), title, tag, src, pinned, date: new Date().toISOString().slice(0, 10) });
+    }
+    A.gallery.save(list);
+    $("#photo-editor").style.display = "none";
+    renderAll();
+    A.toast("Görsel kaydedildi");
+  });
+
+  /* ---------- ürünler ---------- */
+  function renderProducts() {
+    const list = A.sortPinned(A.ensurePinned(A.products.all()));
+    $("#products-table").innerHTML =
+      list
+        .map(
+          (p) => `<tr class="${p.pinned ? "row-pinned" : ""}">
+          <td><button class="pin-btn ${p.pinned ? "on" : ""}" data-pin-product="${p.id}" title="${p.pinned ? "Sabitlemeyi kaldır" : "Sabitle"}">${PIN_ICON}</button></td>
+          <td><strong>${esc(p.name)}</strong><div style="font-size:.75rem">${esc(p.tag)}</div></td>
+          <td class="mono">₺${esc(p.price)}</td>
+          <td>${esc(p.period)}</td>
+          <td>${p.pinned ? '<span class="pill">Sabit</span>' : p.featured ? '<span class="pill">Öne çıkan</span>' : "Yayında"}</td>
+          <td>
+            <button class="adm-btn sm" data-edit-product="${p.id}">Düzenle</button>
+            <button class="adm-btn sm danger" data-del-product="${p.id}">Sil</button>
+          </td>
+        </tr>`
+        )
+        .join("") || '<tr><td colspan="6" style="color:var(--muted)">Ürün yok.</td></tr>';
+
+    const hist = A.productHistory.all().slice(0, 250);
+    $("#product-history-table").innerHTML =
+      hist
+        .map(
+          (h) => `<tr>
+          <td class="mono nowrap">${esc(A.dateTR(h.at))}</td>
+          <td><strong>${esc(h.snapshot.name)}</strong></td>
+          <td class="mono">₺${esc(h.snapshot.price)}</td>
+          <td>${esc(h.action)}</td>
+        </tr>`
+        )
+        .join("") || '<tr><td colspan="4" style="color:var(--muted)">Henüz geçmiş kaydı yok. Bir ürünü düzenlediğinde önceki hâli buraya kaydedilir.</td></tr>';
+
+    document.querySelectorAll("[data-pin-product]").forEach((b) =>
+      b.addEventListener("click", () => {
+        const id = Number(b.getAttribute("data-pin-product"));
+        A.products.save(A.ensurePinned(A.products.all()).map((x) => (x.id === id ? { ...x, pinned: !x.pinned } : x)));
+        renderAll();
+        A.toast("Sabitleme güncellendi");
+      })
+    );
+    document.querySelectorAll("[data-edit-product]").forEach((b) =>
+      b.addEventListener("click", () => {
+        const p = A.products.all().find((x) => x.id === Number(b.getAttribute("data-edit-product")));
+        if (!p) return;
+        $("#p-id").value = p.id;
+        $("#p-name").value = p.name;
+        $("#p-tag").value = p.tag;
+        $("#p-price").value = p.price;
+        $("#p-period").value = p.period;
+        $("#p-desc").value = p.desc;
+        $("#p-features").value = (p.features || []).join("\n");
+        $("#p-featured").checked = !!p.featured;
+        $("#p-pinned").checked = !!p.pinned;
+        $("#product-editor").style.display = "block";
+        $("#product-editor").scrollIntoView({ behavior: "smooth", block: "center" });
+      })
+    );
+    document.querySelectorAll("[data-del-product]").forEach((b) =>
+      b.addEventListener("click", () => {
+        if (!confirm("Bu ürün silinsin mi?")) return;
+        const p = A.products.all().find((x) => x.id === Number(b.getAttribute("data-del-product")));
+        if (p) A.productHistory.add(p, "silindi");
+        A.products.save(A.products.all().filter((x) => x.id !== Number(b.getAttribute("data-del-product"))));
+        renderAll();
+        A.toast("Ürün silindi");
+      })
+    );
+      lockDynamicButtons();
+  }
+  bindViewTabs("#product-tabs", "productView", () => {
+    const active = state.productView === "active";
+    $("#product-active-wrap").style.display = active ? "" : "none";
+    $("#product-history-wrap").style.display = active ? "none" : "";
+    renderProducts();
+  });
+  $("#new-product").addEventListener("click", () => {
+    ["#p-id", "#p-name", "#p-tag", "#p-price", "#p-period", "#p-desc", "#p-features"].forEach((s) => ($(s).value = ""));
+    $("#p-featured").checked = false;
+    $("#p-pinned").checked = false;
+    $("#product-editor").style.display = "block";
+  });
+  $("#cancel-product").addEventListener("click", () => ($("#product-editor").style.display = "none"));
+  $("#save-product").addEventListener("click", () => {
+    const name = $("#p-name").value.trim();
+    const price = $("#p-price").value.trim();
+    if (!name || !price) return A.toast("Ürün adı ve fiyat zorunlu");
+    const data = {
+      name,
+      tag: $("#p-tag").value.trim() || "PAKET",
+      price,
+      period: $("#p-period").value.trim() || "/ 1 ay",
+      desc: $("#p-desc").value.trim(),
+      features: $("#p-features").value.split("\n").map((s) => s.trim()).filter(Boolean),
+      featured: $("#p-featured").checked,
+      pinned: $("#p-pinned").checked,
+    };
+    const list = A.ensurePinned(A.products.all());
+    const id = Number($("#p-id").value);
+    if (id) {
+      const i = list.findIndex((x) => x.id === id);
+      A.productHistory.add(list[i], "güncellendi");
+      list[i] = { ...list[i], ...data };
+    } else {
+      list.push({ id: Date.now(), ...data });
+    }
+    A.products.save(list);
+    $("#product-editor").style.display = "none";
+    renderAll();
+    A.toast("Ürün kaydedildi");
+  });
+
+  /* ---------- mesajlar ---------- */
+  function renderMessages() {
+    const list = A.messages.all();
+    $("#messages-table").innerHTML =
+      list
+        .map(
+          (m) => `<tr>
+          <td class="mono">${new Date(m.at || m.date).toLocaleString("tr-TR")}</td>
+          <td><strong>${esc(m.nick)}</strong></td>
+          <td>${esc(m.contact || "—")}</td>
+          <td>${esc(m.body).slice(0, 90)}${(m.body || "").length > 90 ? "…" : ""}</td>
+          <td class="mono">${esc(m.ip || "—")}</td>
+          <td>
+            <button class="adm-btn sm" data-view-msg="${m.id}">Detay</button>
+            <button class="adm-btn sm danger" data-del-msg="${m.id}">Sil</button>
+          </td>
+        </tr>`
+        )
+        .join("") || '<tr><td colspan="6" style="color:var(--muted)">Mesaj yok.</td></tr>';
+
+    document.querySelectorAll("[data-view-msg]").forEach((b) =>
+      b.addEventListener("click", () => openMessage(Number(b.getAttribute("data-view-msg"))))
+    );
+    document.querySelectorAll("[data-del-msg]").forEach((b) =>
+      b.addEventListener("click", () => {
+        if (!confirm("Mesaj silinsin mi?")) return;
+        A.messages.save(A.messages.all().filter((x) => x.id !== Number(b.getAttribute("data-del-msg"))));
+        renderAll();
+        A.toast("Mesaj silindi");
+      })
+    );
+      lockDynamicButtons();
+  }
+
+  let modal = document.querySelector(".adm-modal");
+  if (!modal) {
+    modal = document.createElement("div");
+    modal.className = "adm-modal";
+    modal.innerHTML = '<div class="adm-modal-card"><div class="adm-card-head"><h3 class="adm-card-title">Mesaj detayı</h3><button class="icon-btn" data-close-msg aria-label="Kapat">×</button></div><dl class="adm-kv"></dl><div class="adm-hint" id="msg-body"></div></div>';
+    document.body.appendChild(modal);
+  }
+  function openMessage(id) {
+    const m = A.messages.all().find((x) => x.id === id);
+    if (!m) return;
+    modal.querySelector(".adm-kv").innerHTML = `
+      <dt>Nick</dt><dd>${esc(m.nick)}</dd>
+      <dt>İletişim</dt><dd>${esc(m.contact || "—")}</dd>
+      <dt>Tarih</dt><dd>${new Date(m.at || m.date).toLocaleString("tr-TR")}</dd>
+      <dt>IP adresi</dt><dd class="mono">${esc(m.ip || "kayıt yok")}</dd>
+      <dt>Konum</dt><dd>${esc(m.location || "kayıt yok")}</dd>
+      <dt>Tarayıcı</dt><dd>${esc(m.agent || "kayıt yok")}</dd>`;
+    $("#msg-body").textContent = m.body || "";
+    modal.classList.add("open");
+  }
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal || e.target.closest("[data-close-msg]")) modal.classList.remove("open");
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") modal.classList.remove("open");
+  });
+
+
+
+  /* ---------- kadro (site Yönetim sayfası) ---------- */
+  function renderTeam() {
+    const list = A.team.all().slice().sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0));
+    $("#team-table").innerHTML =
+      list
+        .map(
+          (m) => `<tr class="${m.pinned ? "row-pinned" : ""}">
+          <td><button class="pin-btn ${m.pinned ? "on" : ""}" data-pin-member="${m.id}" title="En başta göster">${PIN_ICON}</button></td>
+          <td><strong>${esc(m.name)}</strong></td>
+          <td>${esc(m.role)}</td>
+          <td><span class="pill">${esc(m.rank || "MOD")}</span></td>
+          <td>${esc(m.note)}</td>
+          <td>
+            <button class="adm-btn sm" data-edit-member="${m.id}">Düzenle</button>
+            <button class="adm-btn sm danger" data-del-member="${m.id}">Sil</button>
+          </td>
+        </tr>`
+        )
+        .join("") || '<tr><td colspan="6" style="color:var(--muted)">Kadro boş.</td></tr>';
+
+    document.querySelectorAll("[data-pin-member]").forEach((b) =>
+      b.addEventListener("click", () => {
+        const id = Number(b.getAttribute("data-pin-member"));
+        A.team.save(A.team.all().map((x) => (x.id === id ? { ...x, pinned: !x.pinned } : x)));
+        renderTeam();
+        A.toast("Sıralama güncellendi");
+      })
+    );
+    document.querySelectorAll("[data-edit-member]").forEach((b) =>
+      b.addEventListener("click", () => {
+        const m = A.team.all().find((x) => x.id === Number(b.getAttribute("data-edit-member")));
+        if (!m) return;
+        $("#m-id").value = m.id;
+        $("#m-name").value = m.name;
+        $("#m-role").value = m.role;
+        $("#m-rank").value = m.rank || "MOD";
+        $("#m-note").value = m.note;
+        $("#m-pinned").checked = !!m.pinned;
+        $("#member-editor").style.display = "block";
+        $("#member-editor").scrollIntoView({ behavior: "smooth", block: "center" });
+      })
+    );
+    document.querySelectorAll("[data-del-member]").forEach((b) =>
+      b.addEventListener("click", () => {
+        if (!confirm("Bu üye kadrodan silinsin mi?")) return;
+        A.team.save(A.team.all().filter((x) => x.id !== Number(b.getAttribute("data-del-member"))));
+        renderTeam();
+        A.toast("Üye silindi");
+      })
+    );
+      lockDynamicButtons();
+  }
+  $("#new-member").addEventListener("click", () => {
+    ["#m-id", "#m-name", "#m-role", "#m-note"].forEach((x) => ($(x).value = ""));
+    $("#m-rank").value = "MOD";
+    $("#m-pinned").checked = false;
+    $("#member-editor").style.display = "block";
+  });
+  $("#cancel-member").addEventListener("click", () => ($("#member-editor").style.display = "none"));
+  $("#save-member").addEventListener("click", () => {
+    const name = $("#m-name").value.trim();
+    const role = $("#m-role").value.trim();
+    if (!name || !role) return A.toast("İsim ve görev zorunlu");
+    const data = { name, role, rank: $("#m-rank").value, note: $("#m-note").value.trim(), pinned: $("#m-pinned").checked };
+    const list = A.team.all();
+    const id = Number($("#m-id").value);
+    if (id) {
+      const i = list.findIndex((x) => x.id === id);
+      list[i] = { ...list[i], ...data };
+    } else {
+      list.push({ id: Date.now(), ...data });
+    }
+    A.team.save(list);
+    $("#member-editor").style.display = "none";
+    renderTeam();
+    A.toast("Kadro kaydedildi");
+  });
+
+
+  /* ---------- rol -> izin varsayılanı (serbest yazılan rol adları da eşlenir) ---------- */
+  function roleKey(role) {
+    const r = String(role || "").toLowerCase();
+    if (A.ROLE_PERMS[role]) return role;
+    if (/(owner|kurucu|founder|patron|sahip)/.test(r)) return "OWNER";
+    if (/(mod|yetkili|rehber)/.test(r)) return "MOD";
+    if (/(admin|yönetici|yonetici|super|süper)/.test(r)) return "ADMIN";
+    return "ADMIN";
+  }
+  function defaultsFor(role) {
+    return A.ROLE_PERMS[roleKey(role)] || A.ROLE_PERMS.ADMIN;
+  }
+
+  /* ---------- hesap izinleri ---------- */
+  function paintPermChecks(container, granted, attr) {
+    const el = typeof container === "string" ? $(container) : container;
+    const A_ATTR = attr || "data-account-perm";
+    const groups = [];
+    A.PERMS.forEach((p) => {
+      const g = p.group || "Genel";
+      if (!groups.includes(g)) groups.push(g);
+    });
+    el.innerHTML = groups
+      .map((g) => {
+        const items = A.PERMS.filter((p) => (p.group || "Genel") === g);
+        const allOn = items.every((p) => granted.includes(p.key));
+        return `<div class="adm-perm-group">
+          <div class="adm-perm-group-head">
+            <span>${esc(g)} <em>${items.filter((p) => granted.includes(p.key)).length}/${items.length}</em></span>
+            <button type="button" class="adm-perm-all" data-perm-group="${esc(g)}">${allOn ? "hiçbiri" : "tümü"}</button>
+          </div>
+          ${items
+            .map(
+              (p) => `<label class="adm-check"><input type="checkbox" ${A_ATTR}="${p.key}" ${granted.includes(p.key) ? "checked" : ""} /> <span>${esc(p.label)}</span></label>`
+            )
+            .join("")}
+        </div>`;
+      })
+      .join("");
+  }
+  document.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-perm-group]");
+    if (!btn) return;
+    e.preventDefault();
+    const group = btn.getAttribute("data-perm-group");
+    const keys = A.PERMS.filter((p) => (p.group || "Genel") === group).map((p) => p.key);
+    const boxes = Array.prototype
+      .slice.call(document.querySelectorAll("[data-account-perm], [data-perm]"))
+      .filter((c) => keys.includes(c.getAttribute("data-account-perm") || c.getAttribute("data-perm")));
+    const allOn = boxes.every((c) => c.checked);
+    boxes.forEach((c) => (c.checked = !allOn));
+    btn.textContent = allOn ? "tümü" : "hiçbiri";
+  });
+  function readPermChecks() {
+    const out = [];
+    document.querySelectorAll("[data-account-perm]").forEach((c) => {
+      if (c.checked) out.push(c.getAttribute("data-account-perm"));
+    });
+    return out;
+  }
+  let permEmail = null;
+  function openPerms(email) {
+    const acc = A.accounts.all().find((a) => a.email === email);
+    if (!acc) return;
+    if (isRoot(acc)) return A.toast("Ana hesabın izinleri değiştirilemez");
+    permEmail = email;
+    const granted = A.permissions.of(acc);
+    $("#perm-title").textContent = acc.name + " — izinler (" + (acc.role || "ADMIN") + ")";
+    paintPermChecks("#perm-list", granted, "data-perm");
+    $("#perm-editor").style.display = "block";
+    $("#perm-editor").scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+  function closePerms() {
+    $("#perm-editor").style.display = "none";
+    permEmail = null;
+  }
+  $("#save-perms").addEventListener("click", () => {
+    if (!permEmail) return;
+    if (!A.can("accounts.perms")) return A.toast("Bu işlem için iznin yok");
+    const list = [];
+    document.querySelectorAll("[data-perm]").forEach((c) => {
+      if (c.checked) list.push(c.getAttribute("data-perm"));
+    });
+    A.permissions.set(permEmail, list);
+    renderAccounts();
+    closePerms();
+    A.toast("İzinler kaydedildi");
+  });
+  $("#reset-perms").addEventListener("click", () => {
+    if (!permEmail) return;
+    const obj = A.permissions.all();
+    delete obj[permEmail];
+    A.permissions.save(obj);
+    const acc = A.accounts.all().find((a) => a.email === permEmail);
+    openPerms(permEmail);
+    renderAccounts();
+    A.toast("Rol varsayılanına döndü");
+  });
+  document.addEventListener("click", (e) => {
+    if (e.target.closest("[data-close-perms]")) closePerms();
+  });
+
+  /* ---------- yöneticiler ---------- */
+  function selfAccount(a) {
+    const me = A.whoami();
+    return !!(me && me.email === a.email);
+  }
+
+  function renderAccounts() {
+    const me = A.whoami();
+    const list = A.accounts.all();
+    $("#accounts-table").innerHTML =
+      list
+        .map(
+          (a) => `<tr>
+          <td><strong>${esc(a.name)}</strong>${isRoot(a) ? ' <span class="pill">ana hesap</span>' : ""}${me && me.email === a.email ? ' <span class="pill">sen</span>' : ""}</td>
+          <td class="mono">${esc(a.email)}</td>
+          <td><span class="pill">${esc(a.role || "ADMIN")}</span><div class="adm-hint" style="margin-top:4px">${isRoot(a) ? "tüm izinler" : A.permissions.of(a).length + " izin"}</div></td>
+          <td class="mono nowrap">${esc(A.dateTR(a.at))}</td>
+          <td>${isRoot(a)
+            ? '<span class="adm-hint" style="display:inline-flex;align-items:center;gap:6px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg> Korumalı — düzenlenemez, silinemez</span>'
+            : `${selfAccount(a) ? '<span class="adm-hint">Kendi hesabın — başkası düzenleyemez</span>' : ""}
+            <button class="adm-btn sm" data-perms-account="${a.id}">İzinler</button>
+            <button class="adm-btn sm" data-edit-account="${a.id}">Düzenle</button>
+            <button class="adm-btn sm danger" data-del-account="${a.id}">Sil</button>`}
+          </td>
+        </tr>`
+        )
+        .join("") || '<tr><td colspan="5" style="color:var(--muted)">Hesap yok.</td></tr>';
+
+    document.querySelectorAll("[data-perms-account]").forEach((b) =>
+      b.addEventListener("click", () => {
+        const a = A.accounts.all().find((x) => x.id === Number(b.getAttribute("data-perms-account")));
+        if (!a) return;
+        if (isRoot(a)) return A.toast("Ana hesabın izinleri değiştirilemez");
+        if (!A.can("accounts.perms")) return A.toast("Bu işlem için iznin yok");
+        openPerms(a.email);
+      })
+    );
+    document.querySelectorAll("[data-edit-account]").forEach((b) =>
+      b.addEventListener("click", () => {
+        const a = A.accounts.all().find((x) => x.id === Number(b.getAttribute("data-edit-account")));
+        if (!a) return;
+        if (isRoot(a)) return A.toast("Ana hesap düzenlenemez");
+        if (selfAccount(a) && !A.isRoot()) return A.toast("Kendi hesabını buradan düzenleyemezsin");
+        if (!A.can("accounts.edit")) return A.toast("Bu işlem için iznin yok");
+        $("#a-id").value = a.id;
+        $("#a-name").value = a.name;
+        $("#a-email").value = a.email;
+        $("#a-pass").value = a.pass;
+        $("#a-role").value = a.role || "ADMIN";
+        paintPermChecks("#account-perms", A.permissions.of(a));
+        $("#account-editor").style.display = "block";
+        $("#account-editor").scrollIntoView({ behavior: "smooth", block: "center" });
+      })
+    );
+    document.querySelectorAll("[data-del-account]").forEach((b) =>
+      b.addEventListener("click", () => {
+        const id = Number(b.getAttribute("data-del-account"));
+        const target = A.accounts.all().find((x) => x.id === id);
+        if (isRoot(target)) return A.toast("Ana hesap silinemez");
+        if (selfAccount(target)) return A.toast("Kendi hesabını silemezsin");
+        if (!A.can("accounts.delete")) return A.toast("Bu işlem için iznin yok");
+        if (A.accounts.all().length <= 1) return A.toast("Son hesap silinemez");
+        if (!confirm("Bu yönetici hesabı silinsin mi?")) return;
+        A.accounts.remove(id);
+        renderAccounts();
+        A.toast("Hesap silindi");
+      })
+    );
+      lockDynamicButtons();
+  }
+  $("#new-account").addEventListener("click", () => {
+    if (!A.can("accounts.add")) return A.toast("Bu işlem için iznin yok");
+    ["#a-id", "#a-name", "#a-email", "#a-pass"].forEach((x) => ($(x).value = ""));
+    $("#a-role").value = "ADMIN";
+    paintPermChecks("#account-perms", A.ROLE_PERMS.ADMIN);
+    $("#account-editor").style.display = "block";
+    $("#account-editor").scrollIntoView({ behavior: "smooth", block: "center" });
+  });
+  $("#a-role").addEventListener("change", () => {
+    if ($("#a-id").value) return; /* düzenlemede izinlere dokunma */
+    paintPermChecks("#account-perms", defaultsFor($("#a-role").value));
+  });
+  $("#account-role-defaults").addEventListener("click", () => {
+    paintPermChecks("#account-perms", defaultsFor($("#a-role").value));
+    A.toast("Rol varsayılan izinleri seçildi");
+  });
+  $("#cancel-account").addEventListener("click", () => ($("#account-editor").style.display = "none"));
+  $("#save-account").addEventListener("click", () => {
+    const name = $("#a-name").value.trim();
+    const email = $("#a-email").value.trim();
+    const pass = $("#a-pass").value;
+    const role = $("#a-role").value;
+    if (!name || !email || !pass) return A.toast("Ad, e-posta ve şifre zorunlu");
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return A.toast("Geçerli bir e-posta yaz");
+    if (pass.length < 6) return A.toast("Şifre en az 6 karakter olmalı");
+    const id = Number($("#a-id").value);
+    const list = A.accounts.all();
+    if (id && isRoot(list.find((a) => a.id === id))) return A.toast("Ana hesap düzenlenemez");
+    if (String(email).toLowerCase() === ROOT_EMAIL && !id) return A.toast("Bu e-posta ana hesaba ait");
+    if (list.some((a) => a.id !== id && String(a.email).toLowerCase() === email.toLowerCase()))
+      return A.toast("Bu e-posta zaten kayıtlı");
+    const perms = readPermChecks();
+    const oldEmail = id ? (list.find((a) => a.id === id) || {}).email : null;
+    if (id) A.accounts.update(id, { name, email, pass, role });
+    else if (!A.accounts.add({ name, email, pass, role })) return A.toast("Bu e-posta zaten kayıtlı");
+    /* izinler: seçilen rolün varsayılanından farklıysa hesaba özel kaydet */
+    const defaults = defaultsFor(role);
+    const same = perms.length === defaults.length && perms.every((k) => defaults.includes(k));
+    const obj = A.permissions.all();
+    if (oldEmail && oldEmail !== email) delete obj[oldEmail];
+    if (same) delete obj[email];
+    else obj[email] = perms;
+    A.permissions.save(obj);
+    $("#account-editor").style.display = "none";
+    renderAccounts();
+    A.toast("Hesap kaydedildi");
+  });
+
+  /* ---------- ayarlar ---------- */
+  /* ---------- BanIP ---------- */
+  const IP_RE = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/;
+  const validIP = (v) => {
+    const m = String(v || "").trim().match(IP_RE);
+    if (!m) return false;
+    return m.slice(1).every((n) => Number(n) >= 0 && Number(n) <= 255);
+  };
+  const who = () => {
+    const w = A.whoami && A.whoami();
+    return (w && (w.name || w.email)) || "Yönetici";
+  };
+  function renderBans() {
+    const list = A.bans.all();
+    const q = ($("#ban-search").value || "").toLowerCase().trim();
+    const rows = list.filter((b) => !q || (b.ip + " " + (b.reason || "") + " " + (b.note || "")).toLowerCase().includes(q));
+    $("#ban-count").textContent = String(list.length);
+    $("#ban-table").innerHTML = rows.length
+      ? rows
+          .map(
+            (b) => `<tr>
+          <td class="mono">${esc(b.ip)}</td>
+          <td>${esc(b.reason || "—")}</td>
+          <td class="muted-cell">${esc(b.note || "—")}</td>
+          <td>${esc(b.by || "—")}</td>
+          <td class="nowrap">${esc(A.dateTR(b.at))}</td>
+          <td><button class="adm-btn sm danger" data-unban="${esc(b.ip)}">Banı kaldır</button></td>
+        </tr>`
+          )
+          .join("")
+      : `<tr><td colspan="6" class="empty-row">Banlı IP yok. Site herkese açık.</td></tr>`;
+
+    const hist = A.banHistory.all().slice(0, 250);
+    $("#ban-history-count").textContent = String(hist.length);
+    $("#ban-history").innerHTML = hist.length
+      ? hist
+          .map(
+            (h) => `<tr>
+          <td class="mono">${esc(h.ip)}</td>
+          <td><span class="ban-tag ${h.action === "ban" ? "is-ban" : "is-unban"}">${h.action === "ban" ? "Ban" : "Kaldırma"}</span></td>
+          <td>${esc(h.reason || "—")}</td>
+          <td>${esc(h.by || "—")}</td>
+          <td class="nowrap">${esc(A.dateTR(h.at))}</td>
+        </tr>`
+          )
+          .join("")
+      : `<tr><td colspan="5" class="empty-row">Henüz ban kaydı yok.</td></tr>`;
+
+    const myip = (A.ip && A.ip()) || "";
+    $("#my-ip").textContent = myip || "tanımlı değil";
+    if (!$("#my-ip-input").value) $("#my-ip-input").value = myip;
+    lockIfDenied($("#my-ip-save"), "banip.add");
+    lockIfDenied($("#my-ip-ban"), "banip.add");
+    lockIfDenied($("#ban-add"), "banip.add");
+    const inp = $("#b-ip");
+    inp.disabled = !A.can("banip.add");
+    $("#b-reason").disabled = !A.can("banip.add");
+    $("#b-note").disabled = !A.can("banip.add");
+      lockDynamicButtons();
+  }
+  $("#my-ip-save").addEventListener("click", () => {
+    if (!A.can("banip.add")) return A.toast("Bu işlem için iznin yok");
+    const res = A.setMyIp($("#my-ip-input").value);
+    if (!res.ok) return A.toast(res.error);
+    A.toast("Bu cihazın IP'si kaydedildi: " + res.ip);
+    renderBans();
+  });
+  $("#my-ip-ban").addEventListener("click", () => {
+    if (!A.can("banip.add")) return A.toast("Bu işlem için iznin yok");
+    const raw = $("#my-ip-input").value.trim() || (A.ip && A.ip()) || "";
+    if (!A.validIP(raw)) return A.toast("Geçerli bir IP adresi yaz");
+    /* önce bu cihazın IP'si olarak kaydet, sonra banla */
+    A.setMyIp(raw);
+    const res = A.bans.add({ ip: raw, reason: $("#b-reason").value.trim() || "Test", by: who() });
+    if (!res.ok) return A.toast(res.error);
+    A.toast("Bu cihaz banlandı: " + raw + " — çıkış yapıp siteyi açınca ban ekranı çıkar");
+    renderBans();
+  });
+  $("#ban-search").addEventListener("input", () => A.can("banip.view") && renderBans());
+  $("#b-ip").addEventListener("input", () => {
+    const v = $("#b-ip").value.trim();
+    const h = $("#ban-hint");
+    if (!v) return (h.textContent = "", (h.className = "ban-hint"));
+    if (!validIP(v)) return (h.textContent = "Geçersiz IP formatı", (h.className = "ban-hint bad"));
+    if (A.bans.has(v)) return (h.textContent = "Bu IP zaten banlı", (h.className = "ban-hint bad"));
+    h.textContent = "Geçerli IP";
+    h.className = "ban-hint good";
+  });
+  $("#ban-clear").addEventListener("click", () => {
+    $("#b-ip").value = "";
+    $("#b-reason").value = "";
+    $("#b-note").value = "";
+    $("#ban-hint").textContent = "";
+  });
+  $("#ban-add").addEventListener("click", () => {
+    if (!A.can("banip.add")) return A.toast("Bu işlem için iznin yok");
+    const ip = $("#b-ip").value.trim();
+    if (!validIP(ip)) return A.toast("Geçerli bir IP adresi yaz");
+    const res = A.bans.add({ ip, reason: $("#b-reason").value.trim(), note: $("#b-note").value.trim(), by: who() });
+    if (!res.ok) return A.toast(res.error);
+    A.toast("IP banlandı: " + ip);
+    $("#b-ip").value = "";
+    $("#b-reason").value = "";
+    $("#b-note").value = "";
+    $("#ban-hint").textContent = "";
+    renderBans();
+  });
+  document.addEventListener("click", (e) => {
+    const denied = e.target.closest("[data-unban-denied]");
+    if (denied) return A.toast("Bu işlem için iznin yok");
+    const btn = e.target.closest("[data-unban]");
+    if (!btn) return;
+    if (!A.can("banip.remove")) return A.toast("Bu işlem için iznin yok");
+    const ip = btn.getAttribute("data-unban");
+    if (!confirm(ip + " adresinin banını kaldırmak istiyor musun?")) return;
+    const res = A.bans.remove(ip, who());
+    if (!res.ok) return A.toast(res.error);
+    A.toast("Ban kaldırıldı: " + ip);
+    renderBans();
+  });
+
+  /* ---------- modül: bakım modu ---------- */
+  function fillModul() {
+    const s = A.settings.get();
+    const on = !!s.maintenance;
+    const sw = $("#modul-switch");
+    sw.classList.toggle("on", on);
+    sw.setAttribute("aria-checked", on ? "true" : "false");
+    lockIfDenied(sw, "module.maintenance");
+    $("#modul-switch-label").textContent = on ? "Bakım açık" : "Bakım kapalı";
+    $("#modul-dot").classList.toggle("live", !on);
+    $("#modul-title").textContent = on ? "Site bakımda" : "Site yayında";
+    $("#modul-sub").textContent = on
+      ? "Ziyaretçiler bakım ekranını görüyor; yöneticiler siteyi normal gezebilir."
+      : "Site herkese açık. Modu açarsan ziyaretçiler bakım ekranını görür.";
+    $("#m-title").value = s.maintenanceTitle || "Bakımdayız";
+    $("#m-text").value = s.maintenanceText || "";
+    $("#m-until").value = s.maintenanceUntil || "";
+    paintModulPreview();
+    ["m-title", "m-text"].forEach((id) => {
+      const el = $("#" + id);
+      el.disabled = !A.can("module.edit");
+      el.style.opacity = A.can("module.edit") ? "" : ".5";
+    });
+  }
+  function paintModulPreview() {
+    const t = $("#m-title").value.trim() || "Bakımdayız";
+    const x = $("#m-text").value.trim() || "Site şu anda bakımda. Kısa süre içinde yeniden yayında olacağız.";
+    $("#m-preview-title").textContent = t;
+    $("#m-preview-text").textContent = x;
+  }
+  $("#m-title").addEventListener("input", paintModulPreview);
+  $("#m-text").addEventListener("input", paintModulPreview);
+  $("#save-modul").addEventListener("click", () => {
+    if (!A.can("module.edit")) return A.toast("Bu işlem için iznin yok");
+    const s = A.settings.get();
+    s.maintenanceTitle = $("#m-title").value.trim() || "Bakımdayız";
+    s.maintenanceText = $("#m-text").value.trim() || "Site şu anda bakımda. Kısa süre içinde yeniden yayında olacağız.";
+    s.maintenanceUntil = $("#m-until").value || "";
+    A.settings.save(s);
+    A.toast("Bakım yazısı kaydedildi");
+    fillModul();
+  });
+  $("#reset-modul").addEventListener("click", () => {
+    if (!A.can("module.edit")) return A.toast("Bu işlem için iznin yok");
+    $("#m-title").value = "Bakımdayız";
+    $("#m-text").value = "Site şu anda bakımda. Kısa süre içinde yeniden yayında olacağız.";
+    $("#m-until").value = "";
+    paintModulPreview();
+  });
+  /* anahtar: tek handler, tekrar bağlanmaz */
+  const modulSwitch = $("#modul-switch");
+  modulSwitch.addEventListener("click", () => {
+    if (!A.can("module.maintenance")) return A.toast("Bu işlem için iznin yok");
+    const s = A.settings.get();
+    s.maintenance = !s.maintenance;
+    A.settings.save(s);
+    A.toast(s.maintenance ? "Site bakıma alındı" : "Site yayına alındı");
+    fillModul();
+  });
+
+  function fillSettings() {
+    const s = A.settings.get();
+    $("#s-phone").value = s.phone;
+    $("#s-phone-raw").value = s.phoneRaw;
+    $("#s-email").value = s.email;
+    $("#s-ip").value = s.serverIp;
+    $("#s-ts3").value = s.ts3;
+    $("#s-instagram").value = s.instagram;
+    $("#s-youtube").value = s.youtube;
+    $("#s-name").value = s.siteName;
+    $("#s-domain").value = s.domain;
+    $("#s-logo").value = s.logo;
+    $("#s-logo-preview").src = s.logo;
+    const sel = $("#s-year");
+    if (!sel.options.length) {
+      for (let y = 2024; y <= 2040; y++) {
+        const opt = document.createElement("option");
+        opt.value = String(y);
+        opt.textContent = String(y);
+        sel.appendChild(opt);
+      }
+    }
+    sel.value = s.copyrightYear;
+  }
+  $("#s-logo-file").addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      $("#s-logo").value = reader.result;
+      $("#s-logo-preview").src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
+  $("#s-logo").addEventListener("input", () => ($("#s-logo-preview").src = $("#s-logo").value));
+  $("#save-settings").addEventListener("click", () => {
+    A.settings.save({
+      phone: $("#s-phone").value.trim(),
+      phoneRaw: $("#s-phone-raw").value.trim(),
+      email: $("#s-email").value.trim(),
+      serverIp: $("#s-ip").value.trim(),
+      ts3: $("#s-ts3").value.trim(),
+      instagram: $("#s-instagram").value.trim(),
+      youtube: $("#s-youtube").value.trim(),
+      siteName: $("#s-name").value.trim(),
+      domain: $("#s-domain").value.trim(),
+      copyrightYear: $("#s-year").value,
+      logo: $("#s-logo").value.trim(),
+    });
+    A.toast("Ayarlar kaydedildi");
+  });
+  /* ---------- başlat ---------- */
+  if (A.isLoggedIn()) showPanel();
+
+  $("#reset-data").addEventListener("click", () => {
+    if (!confirm("Tüm örnek veriler sıfırlansın mı? (Eklediğin duyuru, görsel, ürün ve mesajlar silinir)")) return;
+    [A.KEYS.notices, A.KEYS.gallery, A.KEYS.products, A.KEYS.messages, A.KEYS.productHistory].forEach((k) => localStorage.removeItem(k));
+    renderAll();
+    A.toast("Veriler sıfırlandı");
+  });
+})();
+</script>
+</body>
+</html>
