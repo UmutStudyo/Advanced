@@ -709,7 +709,16 @@ window.ADV = (function () {
     },
     isLoggedIn: () => {
       try {
-        return localStorage.getItem(KEYS.session) === "1";
+        if (localStorage.getItem(KEYS.session) !== "1") return false;
+        const who = JSON.parse(localStorage.getItem(KEYS.session + "_who") || "null");
+        const email = String((who && who.email) || "").trim().toLowerCase();
+        if (!email) return false;
+        const exists = api.accounts.all().some((a) => String(a.email || "").trim().toLowerCase() === email);
+        if (!exists) {
+          api.logout();
+          return false;
+        }
+        return true;
       } catch (e) {
         return false;
       }
@@ -752,7 +761,11 @@ window.ADV = (function () {
         return null;
       }
     },
-    logout: () => localStorage.removeItem(KEYS.session),
+    logout: () => {
+      localStorage.removeItem(KEYS.session);
+      localStorage.removeItem(KEYS.session + "_who");
+      localStorage.removeItem(KEYS.session + "_perms");
+    },
     /* "2026-11-17" -> 17 Kasım 2026 · "2026-11-17T15:36:45.716Z" -> 17 Kasım 2026 18:36 */
     dateTR: (val, withTime) => {
       if (val == null || val === "") return "—";

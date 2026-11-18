@@ -2959,6 +2959,22 @@
     });
     A.toast("Ayarlar kaydedildi");
   });
+  /* ---------- oturum güvenliği ---------- */
+  function enforceCurrentAccount() {
+    if (A.isLoggedIn()) return;
+    if (!document.querySelector("#panel") || document.querySelector("#panel").style.display === "none") return;
+    A.logout();
+    document.querySelector("#panel").style.display = "none";
+    document.querySelector("#login-screen").style.display = "flex";
+    const error = document.querySelector("#login-error");
+    if (error) {
+      error.textContent = "Bu yönetici hesabı silindi veya artık geçerli değil. Lütfen başka bir hesapla giriş yap.";
+      error.style.display = "block";
+    }
+  }
+  document.addEventListener("adv:remote-update", enforceCurrentAccount);
+  setInterval(enforceCurrentAccount, 3000);
+
   /* ---------- başlat ---------- */
   if (A.isLoggedIn()) showPanel();
 
