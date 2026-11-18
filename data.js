@@ -255,10 +255,67 @@ window.ADV = (function () {
       return JSON.parse(JSON.stringify(fallback));
     }
   }
-  function write(key, val) {
+  const SUPABASE_URL = "https://kaudarlbjfzfvcbvlwgx.supabase.co";
+  const SUPABASE_KEY = "sb_publishable_glNiELbpR-5-mqoKbfTlNA_Qb8AmU_C";
+  const SHARED_KEYS = Object.keys(KEYS).filter((name) => !["session", "visits", "logins"].includes(name));
+  let remoteReady = false;
+  let remoteTimer = null;
+
+  function isSharedKey(key) { return SHARED_KEYS.some((name) => KEYS[name] === key); }
+  function jsonEqual(a, b) {
+    try { return JSON.stringify(a) === JSON.stringify(b); } catch (e) { return false; }
+  }
+  function cloudHeaders(extra) {
+    return Object.assign({
+      apikey: SUPABASE_KEY,
+      Authorization: "Bearer " + SUPABASE_KEY,
+      "Content-Type": "application/json",
+    }, extra || {});
+  }
+  async function cloudPut(key, value) {
+    if (!isSharedKey(key)) return;
     try {
-      localStorage.setItem(key, JSON.stringify(val));
+      await fetch(SUPABASE_URL + "/rest/v1/site_state", {
+        method: "POST",
+        headers: cloudHeaders({ Prefer: "resolution=merge-duplicates,return=minimal" }),
+        body: JSON.stringify([{ key: key, value: value }]),
+      });
     } catch (e) {}
+  }
+  async function cloudPull(announce) {
+    try {
+      const res = await fetch(SUPABASE_URL + "/rest/v1/site_state?select=key,value", { headers: cloudHeaders() });
+      if (!res.ok) return;
+      const rows = await res.json();
+      if (!rows.length && /admin/i.test(location.pathname)) {
+        for (const name of SHARED_KEYS) {
+          const local = localStorage.getItem(KEYS[name]);
+          if (local) { try { await cloudPut(KEYS[name], JSON.parse(local)); } catch (e) {} }
+        }
+        return;
+      }
+      let changed = false;
+      rows.forEach((row) => {
+        if (!row || !isSharedKey(row.key)) return;
+        const oldRaw = localStorage.getItem(row.key);
+        if (oldRaw !== JSON.stringify(row.value)) changed = true;
+        try { localStorage.setItem(row.key, JSON.stringify(row.value)); } catch (e) {}
+      });
+      if (changed && announce) document.dispatchEvent(new CustomEvent("adv:remote-update"));
+      if (!remoteReady) {
+        remoteReady = true;
+        if (changed) document.dispatchEvent(new CustomEvent("adv:remote-ready"));
+      }
+    } catch (e) {}
+  }
+  function startCloudSync() {
+    cloudPull(true);
+    clearInterval(remoteTimer);
+    remoteTimer = setInterval(() => cloudPull(true), 5000);
+  }
+  function write(key, val) {
+    try { localStorage.setItem(key, JSON.stringify(val)); } catch (e) {}
+    if (isSharedKey(key)) cloudPut(key, val);
   }
 
   const startOf = (kind) => {
@@ -734,6 +791,7 @@ window.ADV = (function () {
       el._t = setTimeout(() => el.classList.remove("show"), 2200);
     },
   };
+  setTimeout(startCloudSync, 0);
   return api;
 })();
 

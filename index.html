@@ -270,8 +270,8 @@
   </div>
 </div>
 
-<script src="data.js"></script>
-<script src="site.js"></script>
+<script src="data.js?v=2"></script>
+<script src="site.js?v=2"></script>
 <script>
 (function () {
   const A = window.ADV;
@@ -308,6 +308,14 @@
       </button>`
     )
     .join("");
+})();
+</script>
+<script>
+(function () {
+  if (location.pathname.indexOf("admin") !== -1) return;
+  function refreshOnce() { location.reload(); }
+  document.addEventListener("adv:remote-ready", refreshOnce, { once: true });
+  document.addEventListener("adv:remote-update", refreshOnce, { once: true });
 })();
 </script>
 </body>
