@@ -265,7 +265,7 @@ window.ADV = (function () {
     if (!Array.isArray(value)) return value;
     return value.map((item) => {
       if (!item || typeof item !== "object" || typeof item.src !== "string") return item;
-      return Object.assign({}, item, { src: item.src.replace(/^\.?\/assets\//, "") });
+      return Object.assign({}, item, { src: item.src.replace(/^(?:\.\/|\/)?assets\//, "") });
     });
   }
   function isSharedKey(key) { return SHARED_KEYS.some((name) => KEYS[name] === key); }
