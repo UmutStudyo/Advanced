@@ -126,11 +126,11 @@ window.ADV = (function () {
       },
     ],
     gallery: [
-      { id: 1, src: "assets/g1.jpg", title: "Hücre Bloğu", tag: "jb_advanced_prison" },
-      { id: 2, src: "assets/g2.jpg", title: "Mahkum İsyanı", tag: "isyan" },
-      { id: 3, src: "assets/g3.jpg", title: "VIP Etkinliği", tag: "etkinlik" },
-      { id: 4, src: "assets/g4.jpg", title: "LR Raundu", tag: "last request" },
-      { id: 5, src: "assets/g5.jpg", title: "Gardiyan Ekibi", tag: "gardiyan" },
+      { id: 1, src: "g1.jpg", title: "Hücre Bloğu", tag: "jb_advanced_prison" },
+      { id: 2, src: "g2.jpg", title: "Mahkum İsyanı", tag: "isyan" },
+      { id: 3, src: "g3.jpg", title: "VIP Etkinliği", tag: "etkinlik" },
+      { id: 4, src: "g4.jpg", title: "LR Raundu", tag: "last request" },
+      { id: 5, src: "g5.jpg", title: "Gardiyan Ekibi", tag: "gardiyan" },
     ],
     products: [
       {
@@ -261,6 +261,13 @@ window.ADV = (function () {
   let remoteReady = false;
   let remoteTimer = null;
 
+  function normalizeGalleryList(value) {
+    if (!Array.isArray(value)) return value;
+    return value.map((item) => {
+      if (!item || typeof item !== "object" || typeof item.src !== "string") return item;
+      return Object.assign({}, item, { src: item.src.replace(/^\.?\/assets\//, "") });
+    });
+  }
   function isSharedKey(key) { return SHARED_KEYS.some((name) => KEYS[name] === key); }
   function jsonEqual(a, b) {
     try { return JSON.stringify(a) === JSON.stringify(b); } catch (e) { return false; }
@@ -297,9 +304,10 @@ window.ADV = (function () {
       let changed = false;
       rows.forEach((row) => {
         if (!row || !isSharedKey(row.key)) return;
+        const value = row.key === KEYS.gallery ? normalizeGalleryList(row.value) : row.value;
         const oldRaw = localStorage.getItem(row.key);
-        if (oldRaw !== JSON.stringify(row.value)) changed = true;
-        try { localStorage.setItem(row.key, JSON.stringify(row.value)); } catch (e) {}
+        if (oldRaw !== JSON.stringify(value)) changed = true;
+        try { localStorage.setItem(row.key, JSON.stringify(value)); } catch (e) {}
       });
       if (changed && announce) document.dispatchEvent(new CustomEvent("adv:remote-update"));
       if (!remoteReady) {
@@ -645,8 +653,8 @@ window.ADV = (function () {
       save: (list) => write(KEYS.notices, list),
     },
     gallery: {
-      all: () => read(KEYS.gallery, DEFAULTS.gallery),
-      save: (list) => write(KEYS.gallery, list),
+      all: () => normalizeGalleryList(read(KEYS.gallery, DEFAULTS.gallery)),
+      save: (list) => write(KEYS.gallery, normalizeGalleryList(list)),
     },
     products: {
       all: () => read(KEYS.products, DEFAULTS.products),
