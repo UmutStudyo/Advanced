@@ -257,7 +257,18 @@ window.ADV = (function () {
   }
   const SUPABASE_URL = "https://kaudarlbjfzfvcbvlwgx.supabase.co";
   const SUPABASE_KEY = "sb_publishable_glNiELbpR-5-mqoKbfTlNA_Qb8AmU_C";
-  const SHARED_KEYS = Object.keys(KEYS).filter((name) => !["session", "visits", "logins"].includes(name));
+  const ALL_SHARED_KEYS = Object.keys(KEYS).filter((name) => !["session", "visits", "logins"].includes(name));
+  const CONTENT_PAGE_KEYS = {
+    "/duyurular.html": ["notices"],
+    "/yonetim.html": ["team"],
+    "/fiyatlandirma.html": ["products"],
+    "/galeri.html": ["gallery"],
+  };
+  const pagePath = String(location.pathname || "/").toLowerCase();
+  const isAdminPage = /admin/i.test(pagePath);
+  const SYNC_NAMES = CONTENT_PAGE_KEYS[pagePath] || (isAdminPage ? ALL_SHARED_KEYS : ALL_SHARED_KEYS.filter((name) => name !== "settings"));
+  const POLL_MS = CONTENT_PAGE_KEYS[pagePath] ? 60 * 60 * 1000 : 10 * 1000;
+  const SYNC_KEYS = SYNC_NAMES.map((name) => KEYS[name]);
   let remoteReady = false;
   let remoteTimer = null;
 
@@ -268,7 +279,7 @@ window.ADV = (function () {
       return Object.assign({}, item, { src: item.src.replace(/^(?:\.\/|\/)?assets\//, "") });
     });
   }
-  function isSharedKey(key) { return SHARED_KEYS.some((name) => KEYS[name] === key); }
+  function isSharedKey(key) { return ALL_SHARED_KEYS.some((name) => KEYS[name] === key); }
   function jsonEqual(a, b) {
     try { return JSON.stringify(a) === JSON.stringify(b); } catch (e) { return false; }
   }
@@ -291,11 +302,13 @@ window.ADV = (function () {
   }
   async function cloudPull(announce) {
     try {
-      const res = await fetch(SUPABASE_URL + "/rest/v1/site_state?select=key,value", { headers: cloudHeaders() });
+      const filter = SYNC_KEYS.map((key) => encodeURIComponent(key)).join(",");
+      const query = SYNC_KEYS.length ? "&key=in.(" + filter + ")" : "";
+      const res = await fetch(SUPABASE_URL + "/rest/v1/site_state?select=key,value" + query, { headers: cloudHeaders() });
       if (!res.ok) return;
       const rows = await res.json();
-      if (!rows.length && /admin/i.test(location.pathname)) {
-        for (const name of SHARED_KEYS) {
+      if (!rows.length && isAdminPage) {
+        for (const name of SYNC_NAMES) {
           const local = localStorage.getItem(KEYS[name]);
           if (local) { try { await cloudPut(KEYS[name], JSON.parse(local)); } catch (e) {} }
         }
@@ -319,7 +332,7 @@ window.ADV = (function () {
   function startCloudSync() {
     cloudPull(true);
     clearInterval(remoteTimer);
-    remoteTimer = setInterval(() => cloudPull(true), 5000);
+    remoteTimer = setInterval(() => cloudPull(true), POLL_MS);
   }
   function write(key, val) {
     try { localStorage.setItem(key, JSON.stringify(val)); } catch (e) {}
@@ -349,11 +362,18 @@ window.ADV = (function () {
     settings: {
       get: () => {
         const current = Object.assign({}, SETTINGS, read(KEYS.settings, {}));
-        if (current.siteName === ["Ad", "vanced"].join("")) current.siteName = "Avalanche";
+        /* Logo ve site adı Supabase’ten çekilmez; sabit yerel değerlerdir. */
+        current.siteName = SETTINGS.siteName;
+        current.logo = SETTINGS.logo;
         if (current.ts3 === ["Ad", "vanced"].join("")) current.ts3 = "Avalanche";
         return current;
       },
-      save: (obj) => write(KEYS.settings, Object.assign({}, api.settings.get(), obj || {})),
+      save: (obj) => {
+        const next = Object.assign({}, api.settings.get(), obj || {});
+        delete next.logo;
+        delete next.siteName;
+        write(KEYS.settings, next);
+      },
     },
     /* ---- sık sorulan sorular ---- */
     sss: {
