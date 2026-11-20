@@ -2937,8 +2937,19 @@
     if (!file) return;
     const reader = new FileReader();
     reader.onload = () => {
-      $("#s-logo").value = reader.result;
-      $("#s-logo-preview").src = reader.result;
+      const image = new Image();
+      image.onload = () => {
+        const max = 512;
+        const scale = Math.min(1, max / Math.max(image.naturalWidth || max, image.naturalHeight || max));
+        const canvas = document.createElement("canvas");
+        canvas.width = Math.max(1, Math.round((image.naturalWidth || max) * scale));
+        canvas.height = Math.max(1, Math.round((image.naturalHeight || max) * scale));
+        canvas.getContext("2d").drawImage(image, 0, 0, canvas.width, canvas.height);
+        const compact = canvas.toDataURL("image/webp", 0.82);
+        $("#s-logo").value = compact;
+        $("#s-logo-preview").src = compact;
+      };
+      image.src = reader.result;
     };
     reader.readAsDataURL(file);
   });

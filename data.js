@@ -353,7 +353,7 @@ window.ADV = (function () {
         if (current.ts3 === ["Ad", "vanced"].join("")) current.ts3 = "Avalanche";
         return current;
       },
-      save: (obj) => write(KEYS.settings, obj),
+      save: (obj) => write(KEYS.settings, Object.assign({}, api.settings.get(), obj || {})),
     },
     /* ---- sık sorulan sorular ---- */
     sss: {
