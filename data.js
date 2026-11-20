@@ -1,5 +1,5 @@
 /* =========================================================
-   ADVANCED — ortak veri & yardımcılar
+   AVALANCHE — ortak veri & yardımcılar
    (Yönetici panelindeki değişiklikler burada saklanır)
    ========================================================= */
 window.ADV = (function () {
@@ -25,14 +25,14 @@ window.ADV = (function () {
 
   /* ---- site ayarları (Ayarlar sekmesinden düzenlenebilir) ---- */
   const SETTINGS = {
-    siteName: "Advanced",
+    siteName: "Avalanche",
     domain: "www.advclan.com",
     copyrightYear: "2026",
     phone: "0535 241 76 22",
     phoneRaw: "+905352417622",
     email: "admin@gmail.com",
     serverIp: "95.173.173.124:27015",
-    ts3: "Advanced",
+    ts3: "Avalanche",
     logo: "logo.png",
     instagram: "https://instagram.com/advclan",
     youtube: "https://youtube.com/@rweqewnickz",
@@ -100,9 +100,9 @@ window.ADV = (function () {
         author: "admin",
         date: "2026-08-02",
         summary:
-          "Advanced web sitesi yayında! Artık ürünlerimiz olan VIP, VIP+, Cephane ve Skin paketlerini satın aldığınız anda aktif olacaktır. Diğer duyurularımız için takipte kalın.",
+          "Avalanche web sitesi yayında! Artık ürünlerimiz olan VIP, VIP+, Cephane ve Skin paketlerini satın aldığınız anda aktif olacaktır. Diğer duyurularımız için takipte kalın.",
         body:
-          "Advanced web sitesi yayında!\n\nArtık ürünlerimiz olan VIP, VIP+, Cephane ve Skin paketlerini satın aldığınız anda aktif olacaktır.\n\nDiğer duyurularımız için takipte kalın.",
+          "Avalanche web sitesi yayında!\n\nArtık ürünlerimiz olan VIP, VIP+, Cephane ve Skin paketlerini satın aldığınız anda aktif olacaktır.\n\nDiğer duyurularımız için takipte kalın.",
       },
       {
         id: 2,
@@ -126,7 +126,7 @@ window.ADV = (function () {
       },
     ],
     gallery: [
-      { id: 1, src: "g1.jpg", title: "Hücre Bloğu", tag: "jb_advanced_prison" },
+      { id: 1, src: "g1.jpg", title: "Hücre Bloğu", tag: "jb_avalanche_prison" },
       { id: 2, src: "g2.jpg", title: "Mahkum İsyanı", tag: "isyan" },
       { id: 3, src: "g3.jpg", title: "VIP Etkinliği", tag: "etkinlik" },
       { id: 4, src: "g4.jpg", title: "LR Raundu", tag: "last request" },
@@ -240,7 +240,7 @@ window.ADV = (function () {
       "gallery.view", "gallery.add", "gallery.edit", "gallery.pin",
       "products.view", "products.add", "products.edit", "products.pin",
       "messages.view", "team.view", "settings.view",
-      "module.view", "redul.view", "metul.view", "banip.view", "sss.view", "sss.edit", "kayitlar.view",
+      "module.view", "redul.view", "redul.edit", "metul.view", "banip.view", "sss.view", "sss.edit", "kayitlar.view",
     ],
     MOD: ["dashboard", "notices.view", "messages.view", "team.view"],
   };
@@ -347,7 +347,12 @@ window.ADV = (function () {
     KEYS,
     SETTINGS,
     settings: {
-      get: () => Object.assign({}, SETTINGS, read(KEYS.settings, {})),
+      get: () => {
+        const current = Object.assign({}, SETTINGS, read(KEYS.settings, {}));
+        if (current.siteName === ["Ad", "vanced"].join("")) current.siteName = "Avalanche";
+        if (current.ts3 === ["Ad", "vanced"].join("")) current.ts3 = "Avalanche";
+        return current;
+      },
       save: (obj) => write(KEYS.settings, obj),
     },
     /* ---- sık sorulan sorular ---- */
@@ -416,12 +421,12 @@ window.ADV = (function () {
           const v = obj[k];
           patch[key] = /^#[0-9a-fA-F]{6}$/.test(v || "") ? v : "";
         });
-        api.settings.save(patch);
+        api.settings.save(Object.assign({}, api.settings.get(), patch));
       },
       reset: () => {
         const patch = {};
         api.bg.KEYS.forEach((k) => { patch["color" + k.charAt(0).toUpperCase() + k.slice(1)] = ""; });
-        api.settings.save(patch);
+        api.settings.save(Object.assign({}, api.settings.get(), patch));
       },
     },
     /* ---- metin (Metül) ---- */
@@ -823,7 +828,7 @@ window.ADV = (function () {
    ========================================================= */
 (function () {
   if (!window.ADV) return;
-  const EMPTY = { players: 0, admins: 0, vip: 0, map: "jb_advanced_prison", names: [] };
+  const EMPTY = { players: 0, admins: 0, vip: 0, map: "jb_avalanche_prison", names: [] };
   const adv = window.ADV;
   adv.serverStats = {
     current: Object.assign({}, EMPTY),

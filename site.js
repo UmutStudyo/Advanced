@@ -1,5 +1,5 @@
 /* =========================================================
-   ADVANCED — site geneli (header, mobil menü, akordeon, modal)
+   AVALANCHE — site geneli (header, mobil menü, akordeon, modal)
    ========================================================= */
 (function () {
   const A = window.ADV;
@@ -87,7 +87,7 @@
     modal.setAttribute("aria-modal", "true");
     modal.innerHTML =
       '<div class="modal-card">' +
-      '<div class="modal-head"><div><div class="modal-tagline">Advanced Duyuru Merkezi</div>' +
+      '<div class="modal-head"><div><div class="modal-tagline">Avalanche Duyuru Merkezi</div>' +
       '<h2 class="h3" style="margin-top:8px" data-m-title></h2>' +
       '<div class="mono small muted" style="margin-top:8px" data-m-meta></div></div>' +
       '<button class="icon-btn" data-close aria-label="Kapat"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>' +
@@ -156,7 +156,7 @@
     });
     document.querySelectorAll(".footer-static").forEach((el) => (el.textContent = "IP: " + ipHost));
     /* footer'da ikinci IP yerine TS3 adresi */
-    document.querySelectorAll("[data-footer-ts3]").forEach((el) => (el.textContent = "TS3: " + (s.ts3 || "Advanced")));
+    document.querySelectorAll("[data-footer-ts3]").forEach((el) => (el.textContent = "TS3: " + (s.ts3 || "Avalanche")));
 
     /* telefon */
     document.querySelectorAll('a[href^="tel:"]').forEach((a) => {
@@ -183,7 +183,7 @@
     document.querySelectorAll(".brand-logo, .brand-logo--footer").forEach((img) => (img.src = s.logo));
 
     /* site adı */
-    document.title = document.title.replace(/Advanced/g, s.siteName);
+    document.title = document.title.replace(/Avalanche/g, s.siteName);
     document.querySelectorAll(".brand-word").forEach((w) => {
       if (w.children.length) return;
       w.textContent = s.siteName;
@@ -238,8 +238,8 @@
     el.innerHTML =
       '<div class="gate-card">' +
       '<div class="gate-head">' +
-      '<img class="gate-logo" src="' + A.esc(logo) + '" alt="' + A.esc(st.siteName || "Advanced") + '" />' +
-      '<span class="gate-site">' + A.esc(st.siteName || "Advanced") + "</span>" +
+      '<img class="gate-logo" src="' + A.esc(logo) + '" alt="' + A.esc(st.siteName || "Avalanche") + '" />' +
+      '<span class="gate-site">' + A.esc(st.siteName || "Avalanche") + "</span>" +
       "</div>" +
       '<div class="gate-body">' +
       '<span class="gate-badge"><span class="dot"></span> BAKIM MODU</span>' +
@@ -257,7 +257,7 @@
       " Yönetici girişi</a>" +
       "</div>" +
       "</div>" +
-      '<div class="gate-foot">© ' + A.esc(st.copyrightYear || "2026") + " " + A.esc(st.siteName || "Advanced") + "</div>" +
+      '<div class="gate-foot">© ' + A.esc(st.copyrightYear || "2026") + " " + A.esc(st.siteName || "Avalanche") + "</div>" +
       "</div>";
     document.body.classList.add("maintenance-mode");
     document.body.appendChild(el);
@@ -322,8 +322,8 @@
     el.innerHTML =
       '<div class="gate-card">' +
       '<div class="gate-head">' +
-      '<img class="gate-logo" src="' + A.esc(st.logo || "logo.png") + '" alt="' + A.esc(st.siteName || "Advanced") + '" />' +
-      '<span class="gate-site">' + A.esc(st.siteName || "Advanced") + "</span>" +
+      '<img class="gate-logo" src="' + A.esc(st.logo || "logo.png") + '" alt="' + A.esc(st.siteName || "Avalanche") + '" />' +
+      '<span class="gate-site">' + A.esc(st.siteName || "Avalanche") + "</span>" +
       "</div>" +
       '<div class="gate-body">' +
       '<span class="gate-badge gate-badge--red">' +
@@ -343,7 +343,7 @@
       "</div>" +
       '<p class="gate-note">Yönetici hesabıyla giriş yaparsan ban otomatik kaldırılır.</p>' +
       "</div>" +
-      '<div class="gate-foot">© ' + A.esc(st.copyrightYear || "2026") + " " + A.esc(st.siteName || "Advanced") + "</div>" +
+      '<div class="gate-foot">© ' + A.esc(st.copyrightYear || "2026") + " " + A.esc(st.siteName || "Avalanche") + "</div>" +
       "</div>";
     document.body.classList.add("ban-mode");
     document.body.appendChild(el);
@@ -440,6 +440,7 @@
     if (e.key && e.key.indexOf("adv_settings") === 0) apply();
   });
   window.addEventListener("adv:colors", apply);
+  document.addEventListener("adv:remote-update", apply);
 })();
 
 /* ---------- Metül: yazı tipi / renk / boyut ---------- */
